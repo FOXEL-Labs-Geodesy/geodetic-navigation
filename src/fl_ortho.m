@@ -104,7 +104,7 @@
         fprintf( 2, 'Ortho-photogrammetry : Saving chromatic matrix ...\n' );
 
         % Export ortho-photo %
-        imwrite( flM / 256, [ flPath '/ortho/ortho-photo.png' ] );
+        imwrite( flM(:,:,1:3) / 256, [ flPath '/ortho/ortho-photo.png' ] );
 
     end
 
