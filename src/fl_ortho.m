@@ -38,35 +38,29 @@
     function fl_ortho( flPath, x1, y1, x2, y2, pixpermn95 )
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Importing CH1903+ point cloud vertex ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
 
-        % Import origin point (MN95 NF02 - CH1903+) %
+        % Import origin vertex (MN95 NF02 - CH1903+) %
         flOrg = load( [ flPath '/origin.xyz' ] );
 
-        % Import aligned point cloud %
-        flrPC = load( [ flPath 'aligned/aligned.xyzrgb' ] );
+        % Import MN95-NF02-aligned point cloud (xyzrgba file) %
+        flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );
 
         % Restor point cloud frame %
-        flrPC(:,1) += flOrg(1,1);
-        flrPC(:,2) += flOrg(1,2);
-        flrPC(:,3) += flOrg(1,3);
+        flrPC(:,1:3) += flOrg(1,1:3);
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Preparing image matrix ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Preparing chromatic matrix ...\n' );
 
-        % Create ortho-photo size %
+        % Compute ortho-photo matrix size %
         flW = fix( ( x2 - x1 ) * pixpermn95 );
         flH = fix( ( y2 - y1 ) * pixpermn95 );
         
-        % Create ortho-photo matrix %
-        flM = zeros( flH, flW, 3 );
-        flC = zeros( flH, flW, 1 );
+        % Allocate ortho-photo chromatic and accumulation count matrix %
+        flM = zeros( flH, flW, 4 );
 
         % Display message %
-        fprintf( 2, '\t%i\n\t%i\n', flW, flH );
-
-        % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Computing primary image matrix ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Computing chromatic matrix ...\n' );
 
         % Point cloud vertex projection %
         for fli = 1 : size( flrPC, 1 )
@@ -78,131 +72,36 @@
             % Range detection %
             if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
 
-                % Accumulating colors %
+                % Accumulating colors and count %
                 flM(flH+1-fly,flx,1) += flrPC(fli,4);
                 flM(flH+1-fly,flx,2) += flrPC(fli,5);
                 flM(flH+1-fly,flx,3) += flrPC(fli,6);
-
-                % Update count %
-                flC(flH+1-fly,flx) += 1;
+                flM(flH+1-fly,flx,4) += 1;
 
             end
-
-            % Display progression %
-            if ( mod( fli, 10000 ) == 0 ); fprintf( 2, '\t%3.1f%%\n', 100 * ( fli / size( flrPC, 1 ) ) ); end
 
         end
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Averaging primary image matrix ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Averaging chromatic matrix ...\n' );
 
         % Parsing image pixels %
         flz = 1; for flx = 1 : flW; for fly = 1 : flH
 
             % Zero detection %
-            if ( flC(flH+1-fly,flx) ~= 0 )
+            if ( flM(flH+1-fly,flx,4) ~= 0 )
 
                 % Computing color average %
-                flM(flH+1-fly,flx,1) /= flC(flH+1-fly,flx);
-                flM(flH+1-fly,flx,2) /= flC(flH+1-fly,flx);
-                flM(flH+1-fly,flx,3) /= flC(flH+1-fly,flx);
-
-            else 
-
-                % Update zero count %
-                flz += 1;
+                flM(flH+1-fly,flx,1) /= flM(flH+1-fly,flx,4);
+                flM(flH+1-fly,flx,2) /= flM(flH+1-fly,flx,4);
+                flM(flH+1-fly,flx,3) /= flM(flH+1-fly,flx,4);
 
             end
 
         end; end
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Computing secondary image matrix ...\n' );
-
-        % Loop on zeros %
-        while ( flz > 0 )
-
-            % Parsing image pixels %
-            for flx = 1 : flW; for fly = 1 : flH
-
-                % Detect zero %
-                if ( flC(flH+1-fly,flx) == 0 )
-
-                    % Compute square edges %
-                    fllx = flx - 1; if ( fllx < 1   ) fllx = 1;   end
-                    flhx = flx + 1; if ( flhx > flW ) flhx = flW; end
-                    flly = fly - 1; if ( flly < 1   ) flly = 1;   end
-                    flhy = fly + 1; if ( flhy > flH ) flhy = flH; end
-
-                    % Reset color accumulators %
-                    flr = 0;
-                    flg = 0;
-                    flb = 0;
-                    flc = 0;
-                    fld = 0;
-
-                    % Parsing sub-square %
-                    for flu = fllx : flhx; for flv = flly : flhy
-
-                        % Zero detection %
-                        if ( flC(flH+1-flv,flu) > 0 )
-
-                            % Compute distances %
-                            flk = 1 / sqrt( (flx-flu)^2 + (fly-flv)^2 );
-
-                            % Accumulates colors %
-                            flr += flM(flH+1-flv,flu,1)*flk;
-                            flg += flM(flH+1-flv,flu,2)*flk;
-                            flb += flM(flH+1-flv,flu,3)*flk;
-
-                            % Update distance accumulation %
-                            fld += flk;
-
-                            % Update count %
-                            flc += 1;
-
-                        end
-
-                    end; end
-
-                    % Detect statistic %
-                    if ( flc > 1 )
-
-                        % Assign color %
-                        flM(flH+1-fly,flx,1) = flr / fld;
-                        flM(flH+1-fly,flx,2) = flg / fld;
-                        flM(flH+1-fly,flx,3) = flb / fld;
-
-                        % Update zero count %
-                        flz -= 1;
-
-                        % Remove zero condition %
-                        flC(flH+1-fly,flx) = -1;
-
-                    end
-
-                end
-
-            end; end
-
-            % Parsing image pixels %
-            for flx = 1 : flW; for fly = 1 : flH
-
-                % Reset values %
-                if ( flC(flH+1-fly,flx) < 0 ); flC(flH+1-fly,flx) = 1; end
-
-            end; end
-
-            % Display progression %
-            fprintf( 2, '\t%i\n', flz );
-
-            % Export ortho-photo %
-            imwrite( flM / 256, [ flPath '/ortho/ortho-photo-' num2str( flz ) '.png' ] );
-
-        end
-
-        % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Saving ortho-photo ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Saving chromatic matrix ...\n' );
 
         % Export ortho-photo %
         imwrite( flM / 256, [ flPath '/ortho/ortho-photo.png' ] );

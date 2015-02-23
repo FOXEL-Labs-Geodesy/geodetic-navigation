@@ -53,7 +53,7 @@
         % Reflection detection %
         if ( det( flR ) < 0 ); flV(:,3) *= -1; flR = flV * flU'; end
 
-        % Build estimated tranlation vector %
+        % Build estimated translation vector %
         flt = flwCenter' - flR * flrCenter';
 
     end

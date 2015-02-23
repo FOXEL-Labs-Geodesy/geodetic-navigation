@@ -37,26 +37,26 @@
 
     function flScale = fl_scale( flRef, flRaw )
 
-        % Scaling distance counter %
+        % Scaling factor counter %
         flCount = 0;
 
-        % Scale factor accumulation %
+        % Scale factor accumulator %
         flScale = 0;
 
         % First dimension loop %
         for fli = 1 : size( flRef, 1 )
 
-            % Second dimesion loop %
+            % Second dimension loop %
             for flj = fli + 1 : size( flRef, 1 )
 
                 % Compute distancies %
                 flrDst = sqrt( ( flRef(fli,1) - flRef(flj,1) )^2 + ( flRef(fli,2) - flRef(flj,2) )^2 + ( flRef(fli,3) - flRef(flj,3) )^2 );
                 flwDst = sqrt( ( flRaw(fli,1) - flRaw(flj,1) )^2 + ( flRaw(fli,2) - flRaw(flj,2) )^2 + ( flRaw(fli,3) - flRaw(flj,3) )^2 );
 
-                % Accumulate values %
+                % Accumulate scale factor %
                 flScale += flrDst / flwDst;
 
-                % Update counter %
+                % Update factor counter %
                 flCount = flCount + 1;
 
             end

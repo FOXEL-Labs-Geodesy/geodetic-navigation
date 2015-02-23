@@ -40,54 +40,49 @@
         % Display message %
         fprintf( 2, 'Alignment : Importing reference values ...\n' );
 
-        % Import reference point (MN95 NF02 - CH1903+) %
-        flRef = load( [ flPath '/ref.xyz' ] );
-
-        % Import origin point (MN95 NF02 - CH1903+) %
+        % Import origin vertex (MN95 NF02 - CH1903+) %
         flOrg = load( [ flPath '/origin.xyz' ] );
 
-        % Apply origin shift (MN95 NF02 - CH1903+) %
-        flRef(:,1) -= flOrg(1,1);
-        flRef(:,2) -= flOrg(1,2);
-        flRef(:,3) -= flOrg(1,3);
+        % Import reference vertex (MN95 NF02 - CH1903+) %
+        flRef = load( [ flPath '/ref.xyz' ] );
 
-        % Import raw point cloud corresponding vertex %
+        % Apply origin shift (MN95 NF02 - CH1903+) %
+        flRef(:,1:3) -= flOrg(1,1:3);
+
+        % Import raw point cloud reference vertex %
         flRaw = load( [ flPath '/raw.xyz' ] );
 
         % Display message %
         fprintf( 2, 'Alignment : Scaling point cloud ...\n' );
 
-        % Extract scale factor %
+        % Compute scale factor (Point cloud/MN95-NF02) %
         flScale = fl_scale( flRef, flRaw );
-
-        % Apply scale factor on raw data %
-        flRaw *= flScale;
 
         % Display message %
         fprintf( 2, 'Alignment : Computing rigid transformation ...\n' );
 
-        % Estimate linear transformation %
-        [ flR flt ] = fl_rigid( [ flRef(:,1), flRef(:,2), flRef(:,3) ] , [ flRaw(:,1), flRaw(:,2), flRaw(:,3) ] );
+        % Estimate linear transformation (rigid transformation) %
+        [ flR flt ] = fl_rigid( [ flRef(:,1), flRef(:,2), flRef(:,3) ] , [ flRaw(:,1), flRaw(:,2), flRaw(:,3) ] * flScale );
 
         % Display message %
         fprintf( 2, 'Alignment : Alignment of point cloud ...\n' );
 
-        % Import point cloud (xyzrgb file) %
-        flwPC = load( [ flPath '/original/cloud.xyzrgb' ] );
+        % Import point cloud (xyzrgba file) %
+        flwPC = load( [ flPath '/original/cloud.xyzrgba' ] );
 
-        % Apply scale factor on raw data %
+        % Apply scale factor on point cloud vertex %
         flwPC(:,1) *= flScale;
         flwPC(:,2) *= flScale;
         flwPC(:,3) *= flScale;
 
-        % Align point cloud %
+        % Apply linear transformation on point cloud vertex %
         flrPC = fl_linear( flwPC, flR, flt );
 
         % Display message %
         fprintf( 2, 'Alignment : Exporting point cloud ...\n' );
 
-        % Export aligned point-cloud %
-        dlmwrite( [ flPath '/aligned/aligned.xyzrgb' ], flrPC, 'delimiter', ' ' );
+        % Export MN95-NF02-aligned point cloud (xyzrgba file) %
+        dlmwrite( [ flPath '/aligned/aligned.xyzrgba' ], flrPC, 'delimiter', ' ' );
 
     end
 

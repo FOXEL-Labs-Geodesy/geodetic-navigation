@@ -37,10 +37,10 @@
 
     function flrPC = fl_linear( flwPC, flR, flt )
 
-        % Initialize memory %
+        % Initialize array memory %
         flrPC = flwPC;
 
-        % Compute aligned vertex %
+        % Apply linear transformation on raw point cloud vertex %
         flrPC(:,1) = ( flwPC(:,1) - flt(1) ) * flR'(1,1) + ( flwPC(:,2) - flt(2) ) * flR'(1,2) + ( flwPC(:,3) - flt(3) ) * flR'(1,3);
         flrPC(:,2) = ( flwPC(:,1) - flt(1) ) * flR'(2,1) + ( flwPC(:,2) - flt(2) ) * flR'(2,2) + ( flwPC(:,3) - flt(3) ) * flR'(2,3);
         flrPC(:,3) = ( flwPC(:,1) - flt(1) ) * flR'(3,1) + ( flwPC(:,2) - flt(2) ) * flR'(3,2) + ( flwPC(:,3) - flt(3) ) * flR'(3,3);
