@@ -47,7 +47,9 @@
         flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );
 
         % Restor point cloud frame %
-        flrPC(:,1:3) += flOrg(1,1:3);
+        flrPC(:,1) += flOrg(1,1);
+        flrPC(:,2) += flOrg(1,2);
+        flrPC(:,3) += flOrg(1,3);
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Preparing chromatic matrix ...\n' );
