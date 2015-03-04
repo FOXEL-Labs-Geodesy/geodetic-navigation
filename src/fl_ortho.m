@@ -35,7 +35,7 @@
     %      You are required to attribute the work as explained in the "Usage and
     %      Attribution" section of <http://foxel.ch/license>.
 
-    function fl_ortho( flPath, x1, y1, x2, y2, pixpermn95 )
+    function fl_ortho( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 )
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
@@ -74,11 +74,16 @@
             % Range detection %
             if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
 
-                % Accumulating colors and count %
-                flM(flH+1-fly,flx,1) += flrPC(fli,4);
-                flM(flH+1-fly,flx,2) += flrPC(fli,5);
-                flM(flH+1-fly,flx,3) += flrPC(fli,6);
-                flM(flH+1-fly,flx,4) += 1;
+                % Height filtering %
+                if ( ( flrPC(fli,3) >= z1 ) && ( flrPC(fli,3) <= z2 ) )
+
+                    % Accumulating colors and count %
+                    flM(flH+1-fly,flx,1) += flrPC(fli,4);
+                    flM(flH+1-fly,flx,2) += flrPC(fli,5);
+                    flM(flH+1-fly,flx,3) += flrPC(fli,6);
+                    flM(flH+1-fly,flx,4) += 1;
+
+                end
 
             end
 
@@ -107,6 +112,12 @@
 
         % Export ortho-photo %
         imwrite( flM(:,:,1:3) / 255, [ flPath '/ortho/ortho-photo.png' ] );
+
+        % Display message %
+        fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 rectangle ...\n' );
+
+        % Export ortho-photo MN95 range %
+        flf = fopen( [ flPath '/ortho/ortho-photo.dat' ], 'w' ); fprintf( flf, 'Rectangle CH1903+/MN95 [ %f %f %f %f ] NF02 [ %f %f ]\n', x1, y1, x2, y2, z1, z2 ); fclose( flf );
 
     end
 
