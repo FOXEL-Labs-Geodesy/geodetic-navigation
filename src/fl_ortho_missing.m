@@ -38,73 +38,118 @@
     function fl_ortho_missing( flPath )
 
         % Display message %
-        fprintf( 2, 'Missing pixel interpolation : importing chromatic matrix\n' );
+        fprintf( 2, 'Missing pixel interpolation : importing chromatic matrix ...\n' );
 
         % Import chromatic matrix %
-        flM = double( imread( [ flPath '/ortho/ortho-photo.png' ] ) ) / 255;
+        flM = imread( [ flPath '/ortho/ortho-photo.png' ] );
 
         % Create secondary allocation %
-        flS = flM;
+        flS = double( flM );
 
         % Display message %
-        fprintf( 2, 'Missing pixel interpolation : computing missing pixels\n' );
+        fprintf( 2, 'Missing pixel interpolation : computing missing pixels ...\n' );
 
         % Parsing chromatic matrix %
-        for fly = 1 : size( flM, 1 ); for flx = 1 : size( flM, 2 )
+        for fly = 2 : size( flM, 1 ) - 1; for flx = 2 : size( flM, 2 ) - 1
 
             % Detect black pixel %
             if ( ( flM(fly,flx,1) == 0 ) && ( flM(fly,flx,2) == 0 ) && ( flM(fly,flx,3) == 0 ) )
 
-                % Create y-interpolant %
-                for fli = -size( flM, 1 ) + 1 : size( flM, 1 ) * 2
+                % Initialize sampling - parsing %
+                flmd = +0;
+                flds = +0;
+                fldx = +1;
+                fldy = -1;
+                flux = flx;
+                fluy = fly;
+                fllx = flx; 
+                flly = fly;
+                flhx = flx;
+                flhy = fly;
 
-                    % Sampling nodes %
-                    fliyt( fli + size( flM, 1 ) ) = fli;
+                % Initialize sampling - accumulators  %
+                flar = 0;
+                flag = 0;
+                flab = 0;
+                flac = 0;
 
-                    % Detect position %
-                    if ( fli < 1 )
+                % Initialize chromatic accumulators %
+                flpx = 0;
+                flmx = 0;
+                flpy = 0;
+                flmy = 0;
 
-                        % Sampling nodes %
-                        fliy1( fli + size( flM, 1 ) ) = flM(-fli+1,flx,1);
-                        fliy2( fli + size( flM, 1 ) ) = flM(-fli+1,flx,2);
-                        fliy3( fli + size( flM, 1 ) ) = flM(-fli+1,flx,3);
+                % Sampling condition %
+                while ( ( ( flds < 8 ) || ( ( flmx + flpx + flmy + flpy ) < 3 ) ) && ( flds < 16 ) )
 
-                    elseif ( fli <= size( flM, 1 ) )
+                    % Compute distance to origin %
+                    flds = sqrt( ( flux - flx ) ^ 2 + ( fluy - fly ) ^ 2 );
 
-                        % Sampling nodes %
-                        fliy1( fli + size( flM, 1 ) ) = flM( fli,flx,1);
-                        fliy2( fli + size( flM, 1 ) ) = flM( fli,flx,2);
-                        fliy3( fli + size( flM, 1 ) ) = flM( fli,flx,3);
+                    % Sampling range verification %
+                    if ( ( flux > 0 ) && ( flux <= size( flM, 2 ) ) && ( fluy > 0 ) && ( fluy <= size( flM, 1 ) ) ) 
 
-                    else
+                        % Chromatic pixel detection %
+                        if ( ( flM(fluy,flux,1) ~= 0 ) && ( flM(fluy,flux,2) ~= 0 ) && ( flM(fluy,flux,3) ~= 0 ) )
 
-                        % Sampling nodes %
-                        fliy1( fli + size( flM, 1 ) ) = flM( 2*size( flM, 1 )+1-fli,flx,1);
-                        fliy2( fli + size( flM, 1 ) ) = flM( 2*size( flM, 1 )+1-fli,flx,2);
-                        fliy3( fli + size( flM, 1 ) ) = flM( 2*size( flM, 1 )+1-fli,flx,3);
+                            % Accumulate color components %
+                            flab += double( flM(fluy,flux,1) ) * flds;
+                            flag += double( flM(fluy,flux,2) ) * flds;
+                            flar += double( flM(fluy,flux,3) ) * flds;
+
+                            % Update sampling weight %
+                            flac += flds;
+
+                            % Geometric condition %
+                            if ( ( flux - flx ) > 0 ); flpx = 1; else; flmx = 1; end
+                            if ( ( fluy - fly ) > 0 ); flpy = 1; else; flmy = 1; end
+
+                        end
+
+                    end
+
+                    % Parsing management %
+                    if ( flmd == 0 )
+
+                        % Update x-component %
+                        flux += fldx;
+
+                        % Detect boundaries %
+                        if     ( flux > flhx ); fldx *= -1; flmd = 1; flhx = flux;
+                        elseif ( flux < fllx ); fldx *= -1; flmd = 1; fllx = flux; end
+
+                    elseif ( flmd == 1 )
+
+                        % Update y-component %
+                        fluy += fldy;
+
+                        % Detect boundaries %
+                        if     ( fluy > flhy ); fldy *= -1; flmd = 0; flhy = fluy;
+                        elseif ( fluy < flly ); fldy *= -1; flmd = 0; flly = fluy; end
 
                     end
 
                 end
 
-                % Compute chromatic interpolants %
-                flp1 = polyfit( fliyt, fliy1, size( flM, 1 ) );
-                flp2 = polyfit( fliyt, fliy2, size( flM, 1 ) );
-                flp3 = polyfit( fliyt, fliy3, size( flM, 1 ) );
+                % Check sampling results %
+                if ( flac > 0 )
 
-                % Assign pixel color %
-                flS(fly,flx,1) = polyval( flp1, fly );
-                flS(fly,flx,2) = polyval( flp2, fly );
-                flS(fly,flx,3) = polyval( flp3, fly );
+                    % Components reconstruction %
+                    flS(fly,flx,1) = flab / flac;
+                    flS(fly,flx,2) = flag / flac;
+                    flS(fly,flx,3) = flar / flac;
+
+                end
 
             end
 
-        end; fprintf( 2, '\t%03.1f%%\n', ( fly / size( flM, 1 ) ) * 100 ); end
+        % Display progression %
+        end; fprintf( 2, '\t%05.1f%%\n', ( fly / size( flM, 1 ) ) * 100 ); end
 
         % Display message %
-        fprintf( 2, 'Missing pixel interpolation : exporting chromatic matrix\n' );
+        fprintf( 2, 'Missing pixel interpolation : exporting chromatic matrix ...\n' );
 
         % Import chromatic matrix %
-        imwrite( flS, [ flPath '/ortho/ortho-photo-interpolated.png' ] ) / 255;
+        imwrite( uint8( flS ), [ flPath '/ortho/ortho-photo-interpolated.png' ] ) / 255;
 
     end
+
