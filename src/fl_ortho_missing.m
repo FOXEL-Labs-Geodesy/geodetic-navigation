@@ -80,7 +80,7 @@
                 flmy = 0;
 
                 % Sampling condition %
-                while ( ( ( flds < 8 ) || ( ( flmx + flpx + flmy + flpy ) < 3 ) ) && ( flds < 16 ) )
+                while (  ( ( flmx + flpx + flmy + flpy ) < 4 ) && ( flds < 256 ) )
 
                     % Compute distance to origin %
                     flds = sqrt( ( flux - flx ) ^ 2 + ( fluy - fly ) ^ 2 );
@@ -91,13 +91,16 @@
                         % Chromatic pixel detection %
                         if ( ( flM(fluy,flux,1) ~= 0 ) && ( flM(fluy,flux,2) ~= 0 ) && ( flM(fluy,flux,3) ~= 0 ) )
 
+                            % Compute weight %
+                            flws = ( 1 / flds ) * ( 1 / flds );
+
                             % Accumulate color components %
-                            flab += double( flM(fluy,flux,1) ) * flds;
-                            flag += double( flM(fluy,flux,2) ) * flds;
-                            flar += double( flM(fluy,flux,3) ) * flds;
+                            flab += double( flM(fluy,flux,1) ) * flws;
+                            flag += double( flM(fluy,flux,2) ) * flws;
+                            flar += double( flM(fluy,flux,3) ) * flws;
 
                             % Update sampling weight %
-                            flac += flds;
+                            flac += flws;
 
                             % Geometric condition %
                             if ( ( flux - flx ) > 0 ); flpx = 1; else; flmx = 1; end
