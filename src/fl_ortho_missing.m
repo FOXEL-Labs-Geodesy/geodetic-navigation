@@ -92,7 +92,7 @@
                         if ( ( flM(fluy,flux,1) ~= 0 ) && ( flM(fluy,flux,2) ~= 0 ) && ( flM(fluy,flux,3) ~= 0 ) )
 
                             % Compute weight %
-                            flws = ( 1 / flds ) * ( 1 / flds );
+                            flws = ( 1 / flds );
 
                             % Accumulate color components %
                             flab += double( flM(fluy,flux,1) ) * flws;
