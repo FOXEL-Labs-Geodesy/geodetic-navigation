@@ -35,7 +35,7 @@
     %      You are required to attribute the work as explained in the "Usage and
     %      Attribution" section of <http://foxel.ch/license>.
 
-    function fl_ortho_missing( flPath )
+    function fl_ortho_missing( flPath, flRadius )
 
         % Display message %
         fprintf( 2, 'Missing pixel interpolation : importing chromatic matrix ...\n' );
@@ -80,7 +80,7 @@
                 flmy = 0;
 
                 % Sampling condition %
-                while (  ( ( flmx + flpx + flmy + flpy ) < 4 ) && ( flds < 256 ) )
+                while (  ( ( flmx + flpx + flmy + flpy ) < 4 ) && ( flds < flRadius ) )
 
                     % Compute distance to origin %
                     flds = sqrt( ( flux - flx ) ^ 2 + ( fluy - fly ) ^ 2 );
