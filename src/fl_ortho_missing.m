@@ -80,7 +80,7 @@
                 flmy = 0;
 
                 % Sampling condition %
-                while (  ( ( flmx + flpx + flmy + flpy ) < 4 ) && ( flds < flRadius ) )
+                while ( ( ( flmx + flpx + flmy + flpy ) < 4 ) && ( flds < flRadius ) )
 
                     % Compute distance to origin %
                     flds = sqrt( ( flux - flx ) ^ 2 + ( fluy - fly ) ^ 2 );
@@ -134,7 +134,7 @@
                 end
 
                 % Check sampling results %
-                if ( flac > 0 )
+                if ( ( flmx + flpx + flmy + flpy ) == 4 )
 
                     % Components reconstruction %
                     flS(fly,flx,1) = flab / flac;
