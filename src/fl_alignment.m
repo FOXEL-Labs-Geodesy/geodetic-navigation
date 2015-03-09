@@ -47,7 +47,9 @@
         flRef = load( [ flPath '/ref.xyz' ] );
 
         % Apply origin shift (MN95 NF02 - CH1903+) %
-        flRef(:,1:3) -= flOrg(1,1:3);
+        flRef(:,1) -= flOrg(1,1);
+        flRef(:,2) -= flOrg(1,2);
+        flRef(:,3) -= flOrg(1,3);
 
         % Import raw point cloud reference vertex %
         flRaw = load( [ flPath '/raw.xyz' ] );
@@ -56,7 +58,7 @@
         fprintf( 2, 'Alignment : Scaling point cloud ...\n' );
 
         % Compute scale factor (Point cloud/MN95-NF02) %
-        flScale = fl_scale( flRef, flRaw );
+        flScale = fl_scale( flRef, flRaw )
 
         % Display message %
         fprintf( 2, 'Alignment : Computing rigid transformation ...\n' );
