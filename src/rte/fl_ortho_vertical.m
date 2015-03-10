@@ -35,7 +35,7 @@
     %      You are required to attribute the work as explained in the "Usage and
     %      Attribution" section of <http://foxel.ch/license>.
 
-    function fl_ortho( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 )
+    function fl_ortho_vertical( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax )
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
@@ -43,20 +43,43 @@
         % Import origin vertex (MN95 NF02 - CH1903+) %
         flOrg = load( [ flPath '/origin.xyz' ] );
 
+        % Compute projection vectors %
+        flnx = + flnx - flox;
+        flny = + flny - floy;
+        flnz = + 0;
+        flpx = + flny;
+        flpy = - flnx;
+        flpz = + 0;
+
+        % Normalize projection vectors %
+        flnn = sqrt( flnx * flnx + flny * flny + flnz * flnz );
+        flnx /= flnn;
+        flny /= flnn;
+        flnz /= flnn;
+        flnn = sqrt( flpx * flpx + flpy * flpy + flpz * flpz );
+        flpx /= flnn;
+        flpy /= flnn;
+        flpz /= flnn;
+
+        % Compute projection vectors %
+        flhx = - flny * flpz + flnz * flpy;
+        flhy = - flnz * flpx + flnx * flpz;
+        flhz = - flnx * flpy + flny * flpx;
+
         % Import MN95-NF02-aligned point cloud (xyzrgba file) %
         flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );
 
         % Restor point cloud frame %
-        flrPC(:,1) += flOrg(1,1);
-        flrPC(:,2) += flOrg(1,2);
-        flrPC(:,3) += flOrg(1,3);
+        flrPC(:,1) += flOrg(1,1) - flox;
+        flrPC(:,2) += flOrg(1,2) - floy;
+        flrPC(:,3) += flOrg(1,3) - floz;
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Preparing chromatic matrix ...\n' );
 
         % Compute ortho-photo matrix size %
-        flW = fix( ( x2 - x1 ) * pixpermn95 );
-        flH = fix( ( y2 - y1 ) * pixpermn95 );
+        flW = fix( flpSize * pixpermn95 );
+        flH = fix( flhSize * pixpermn95 );
         
         % Allocate ortho-photo chromatic and accumulation count matrix %
         flM = zeros( flH, flW, 4 );
@@ -64,18 +87,23 @@
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Computing chromatic matrix ...\n' );
 
+        figure; hold on;
+
         % Point cloud vertex projection %
         for fli = 1 : size( flrPC, 1 )
 
-            % Compute point position %
-            flx = fix( ( flrPC(fli,1) - x1 ) * pixpermn95 + 0.5 );
-            fly = fix( ( flrPC(fli,2) - y1 ) * pixpermn95 + 0.5 );
+            % Compute projected coordinates %
+            flx = fix( ( flW * 0.5 ) + 0.5 + pixpermn95 * ( flrPC(fli,1) * flpx + flrPC(fli,2) * flpy ) );
+            fly = fix( ( flH * 0.5 ) + 0.5 + pixpermn95 * ( flrPC(fli,3) ) );
 
             % Range detection %
             if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
 
-                % Height filtering %
-                if ( ( flrPC(fli,3) >= z1 ) && ( flrPC(fli,3) <= z2 ) )
+                % Compute normal distance %
+                flDist = flrPC(fli,1) * flnx + flrPC(fli,2) * flny + flrPC(fli,3) * flnz;
+
+                % Detect projection face %
+                if ( ( flDist > flmin ) && ( flDist < flmax ) )
 
                     % Accumulating colors and count %
                     flM(flH+1-fly,flx,1) += flrPC(fli,4);
@@ -86,6 +114,8 @@
                 end
 
             end
+
+            if ( mod( fli, 50000 ) == 0 ); imshow( flM(:,:,1:3) ); drawnow; end
 
         end
 
@@ -111,13 +141,12 @@
         fprintf( 2, 'Ortho-photogrammetry : Saving chromatic matrix ...\n' );
 
         % Export ortho-photo %
-        imwrite( flM(:,:,1:3) / 255, [ flPath '/ortho/ortho-photo.png' ] );
+        imwrite( flM(:,:,1:3) / 255, [ flPath '/projection/ortho-projection.png' ] );
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 rectangle ...\n' );
 
         % Export ortho-photo MN95 range %
-        flf = fopen( [ flPath '/ortho/projection.dat' ], 'w' ); fprintf( flf, 'Projection [ %f %f %f %f, %f, %f %f ]\n', x1, y1, x2, y2, pixpermn95, z1, z2 ); fclose( flf );
+        flf = fopen( [ flPath '/ortho/projection.dat' ], 'w' ); fprintf( flf, 'Projection parameters [ %f %f %f, %f %f, %f, %f %f ]\n', flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize ); fclose( flf );
 
     end
-
