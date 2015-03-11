@@ -116,8 +116,21 @@
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 rectangle ...\n' );
 
-        % Export ortho-photo MN95 range %
-        flf = fopen( [ flPath '/ortho/projection.dat' ], 'w' ); fprintf( flf, 'Projection [ %f %f %f %f, %f, %f %f ]\n', x1, y1, x2, y2, pixpermn95, z1, z2 ); fclose( flf );
+        % Export function repport %
+        fl_cmd( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 );
+
+    end
+
+    function fl_cmd( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 )
+
+        % Create output stream for repporting %
+        flf = fopen( [ flPath '/ortho/cmd.dat' ], 'w' );
+
+        % Export command parameter %
+        fprintf( flf, 'Parameters : %f %f %f %f, %f, %f %f\n', x1, y1, x2, y2, pixpermn95, z1, z2 );
+
+        % Delete output stream %
+        fclose( flf );
 
     end
 

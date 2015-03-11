@@ -152,7 +152,7 @@
         fprintf( 2, 'Missing pixel interpolation : exporting chromatic matrix ...\n' );
 
         % Import chromatic matrix %
-        imwrite( uint8( flS ), [ flPath '/ortho/ortho-photo-interpolated.png' ] ) / 255;
+        imwrite( uint8( flS ), [ flPath '/ortho/ortho-photo-interpolated.png' ] );
 
     end
 
