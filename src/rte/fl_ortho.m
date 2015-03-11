@@ -77,13 +77,11 @@
                 % Range detection %
                 if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
 
-                        % Accumulating colors and count %
-                        flM(flH+1-fly,flx,1) += flrPC(fli,4);
-                        flM(flH+1-fly,flx,2) += flrPC(fli,5);
-                        flM(flH+1-fly,flx,3) += flrPC(fli,6);
-                        flM(flH+1-fly,flx,4) += 1;
-
-                    end
+                    % Accumulating colors and count %
+                    flM(flH+1-fly,flx,1) += flrPC(fli,4);
+                    flM(flH+1-fly,flx,2) += flrPC(fli,5);
+                    flM(flH+1-fly,flx,3) += flrPC(fli,6);
+                    flM(flH+1-fly,flx,4) += 1;
 
                 end
 

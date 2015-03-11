@@ -87,8 +87,6 @@
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Computing chromatic matrix ...\n' );
 
-        figure; hold on;
-
         % Point cloud vertex projection %
         for fli = 1 : size( flrPC, 1 )
 

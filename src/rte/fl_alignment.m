@@ -87,7 +87,7 @@
         dlmwrite( [ flPath '/aligned/aligned.xyzrgba' ], flrPC, 'delimiter', ' ' );
 
         % Display message %
-        fprintf( 2, 'Alignment : Exporting alignement repport ...\n' );
+        fprintf( 2, 'Alignment : Exporting CH1903+/MN95/NF02 alignement repport ...\n' );
 
         % Export alignement repport %
         fl_alignment_repport( flPath, flRef, flRaw, flR, flt, flScale );
