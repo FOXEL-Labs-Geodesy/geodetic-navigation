@@ -58,7 +58,7 @@
         flW = fix( ( x2 - x1 ) * pixpermn95 );
         flH = fix( ( y2 - y1 ) * pixpermn95 );
         
-        % Allocate ortho-photo chromatic and accumulation count matrix %
+        % Allocate ortho-projection chromatic matrix %
         flM = zeros( flH, flW, 4 );
 
         % Display message %
@@ -67,21 +67,23 @@
         % Point cloud vertex projection %
         for fli = 1 : size( flrPC, 1 )
 
-            % Compute point position %
-            flx = fix( ( flrPC(fli,1) - x1 ) * pixpermn95 + 0.5 );
-            fly = fix( ( flrPC(fli,2) - y1 ) * pixpermn95 + 0.5 );
+            % Height filtering %
+            if ( ( flrPC(fli,3) >= z1 ) && ( flrPC(fli,3) <= z2 ) )
 
-            % Range detection %
-            if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
+                % Compute projected point coordinates %
+                flx = fix( ( flrPC(fli,1) - x1 ) * pixpermn95 + 0.5 );
+                fly = fix( ( flrPC(fli,2) - y1 ) * pixpermn95 + 0.5 );
 
-                % Height filtering %
-                if ( ( flrPC(fli,3) >= z1 ) && ( flrPC(fli,3) <= z2 ) )
+                % Range detection %
+                if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
 
-                    % Accumulating colors and count %
-                    flM(flH+1-fly,flx,1) += flrPC(fli,4);
-                    flM(flH+1-fly,flx,2) += flrPC(fli,5);
-                    flM(flH+1-fly,flx,3) += flrPC(fli,6);
-                    flM(flH+1-fly,flx,4) += 1;
+                        % Accumulating colors and count %
+                        flM(flH+1-fly,flx,1) += flrPC(fli,4);
+                        flM(flH+1-fly,flx,2) += flrPC(fli,5);
+                        flM(flH+1-fly,flx,3) += flrPC(fli,6);
+                        flM(flH+1-fly,flx,4) += 1;
+
+                    end
 
                 end
 
@@ -110,11 +112,11 @@
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Saving chromatic matrix ...\n' );
 
-        % Export ortho-photo %
+        % Export ortho-photography image %
         imwrite( flM(:,:,1:3) / 255, [ flPath '/ortho/ortho-photo.png' ] );
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 rectangle ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 parameters ...\n' );
 
         % Export function repport %
         fl_cmd( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 );
