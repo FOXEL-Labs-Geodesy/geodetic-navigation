@@ -35,7 +35,7 @@
     %      You are required to attribute the work as explained in the "Usage and
     %      Attribution" section of <http://foxel.ch/license>.
 
-    function fl_ortho_vertical( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax )
+    function fl_vertical( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax )
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
