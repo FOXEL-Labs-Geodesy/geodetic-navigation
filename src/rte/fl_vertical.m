@@ -55,6 +55,16 @@
         flrPC(:,3) += flOrg(1,3) - floz;
 
         % Display message %
+        fprintf( 2, 'Ortho-projection : Preparing chromatic matrix ...\n' );
+
+        % Compute ortho-photo matrix size %
+        flW = fix( flpSize * pixpermn95 );
+        flH = fix( flhSize * pixpermn95 );
+        
+        % Allocate ortho-projection chromatic matrix %
+        flM = zeros( flH, flW, 4 );
+
+        % Display message %
         fprintf( 2, 'Ortho-projection : Computing projection vectors ...\n' );
 
         % Compute planimetric projection vectors %
@@ -81,16 +91,6 @@
         flhx = - flny * flpz + flnz * flpy;
         flhy = - flnz * flpx + flnx * flpz;
         flhz = - flnx * flpy + flny * flpx;
-
-        % Display message %
-        fprintf( 2, 'Ortho-projection : Preparing chromatic matrix ...\n' );
-
-        % Compute ortho-photo matrix size %
-        flW = fix( flpSize * pixpermn95 );
-        flH = fix( flhSize * pixpermn95 );
-        
-        % Allocate ortho-projection chromatic matrix %
-        flM = zeros( flH, flW, 4 );
 
         % Display message %
         fprintf( 2, 'Ortho-projection : Computing chromatic matrix ...\n' );
