@@ -38,10 +38,13 @@
     function fl_ortho( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 )
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
+        fprintf( 2, 'Ortho-photogrammetry : Importing reference values ...\n' );
 
         % Import origin vertex (MN95 NF02 - CH1903+) %
         flOrg = load( [ flPath '/origin.xyz' ] );
+
+        % Display message %
+        fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
 
         % Import MN95-NF02-aligned point cloud (xyzrgba file) %
         flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );

@@ -38,33 +38,13 @@
     function fl_vertical( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax )
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
+        fprintf( 2, 'Alignment : Importing reference values ...\n' );
 
         % Import origin vertex (MN95 NF02 - CH1903+) %
         flOrg = load( [ flPath '/origin.xyz' ] );
 
-        % Compute planimetric projection vectors %
-        flnx = + flnx - flox;
-        flny = + flny - floy;
-        flnz = + 0;
-        flpx = + flny;
-        flpy = - flnx;
-        flpz = + 0;
-
-        % Normalize planimetric projection vectors %
-        flnn = sqrt( flnx * flnx + flny * flny + flnz * flnz );
-        flnx /= flnn;
-        flny /= flnn;
-        flnz /= flnn;
-        flnn = sqrt( flpx * flpx + flpy * flpy + flpz * flpz );
-        flpx /= flnn;
-        flpy /= flnn;
-        flpz /= flnn;
-
-        % Compute altimetric projection vector %
-        flhx = - flny * flpz + flnz * flpy;
-        flhy = - flnz * flpx + flnx * flpz;
-        flhz = - flnx * flpy + flny * flpx;
+        % Display message %
+        fprintf( 2, 'Ortho-projection : Importing point-cloud ...\n' );
 
         % Import MN95-NF02-aligned point cloud (xyzrgba file) %
         flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );
@@ -75,7 +55,35 @@
         flrPC(:,3) += flOrg(1,3) - floz;
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Preparing chromatic matrix ...\n' );
+        fprintf( 2, 'Ortho-projection : Computing projection vectors ...\n' );
+
+        % Compute planimetric projection vectors %
+        flnx = + flnx - flox;
+        flny = + flny - floy;
+        flnz = + 0;
+        flpx = + flny;
+        flpy = - flnx;
+        flpz = + 0;
+
+        % Compute vector norms %
+        flnn = sqrt( flpx * flpx + flpy * flpy + flpz * flpz );
+        flpn = sqrt( flnx * flnx + flny * flny + flnz * flnz );
+
+        % Normalize planimetric projection vectors %
+        flnx /= flnn;
+        flny /= flnn;
+        flnz /= flnn;
+        flpx /= flpn;
+        flpy /= flpn;
+        flpz /= flpn;
+
+        % Compute altimetric projection vector %
+        flhx = - flny * flpz + flnz * flpy;
+        flhy = - flnz * flpx + flnx * flpz;
+        flhz = - flnx * flpy + flny * flpx;
+
+        % Display message %
+        fprintf( 2, 'Ortho-projection : Preparing chromatic matrix ...\n' );
 
         % Compute ortho-photo matrix size %
         flW = fix( flpSize * pixpermn95 );
@@ -85,7 +93,7 @@
         flM = zeros( flH, flW, 4 );
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Computing chromatic matrix ...\n' );
+        fprintf( 2, 'Ortho-projection : Computing chromatic matrix ...\n' );
 
         % Point cloud vertex projection %
         for fli = 1 : size( flrPC, 1 )
@@ -116,7 +124,7 @@
         end
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Averaging chromatic matrix ...\n' );
+        fprintf( 2, 'Ortho-projection : Averaging chromatic matrix ...\n' );
 
         % Parsing image pixels %
         flz = 1; for flx = 1 : flW; for fly = 1 : flH
@@ -134,13 +142,13 @@
         end; end
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Saving chromatic matrix ...\n' );
+        fprintf( 2, 'Ortho-projection : Saving chromatic matrix ...\n' );
 
         % Export ortho-projection image %
         imwrite( flM(:,:,1:3) / 255, [ flPath '/projection/ortho-projection.png' ] );
 
         % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 parameters ...\n' );
+        fprintf( 2, 'Ortho-projection : Saving CH1903+/MN95 parameters ...\n' );
 
         % Export function repport %
         fl_cmd( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax );
