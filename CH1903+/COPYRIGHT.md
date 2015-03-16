@@ -1,7 +1,7 @@
 
 ## Copyright
 
-FOXEL Laboratories - CH1903+ - Swiss reference systems<br />
+FOXEL Laboratories<br /> CH1903+ - Swiss reference systems<br />
 This program is part of the FOXEL project <[http://foxel.ch](http://foxel.ch)>.
 
 Copyright (c) 2013-2015 FOXEL SA - [http://foxel.ch](http://foxel.ch)<br />
