@@ -1,7 +1,9 @@
-
 ## foxel laboratories<br />CH1903+
 
+<p align="justify">
 This repository stores Foxel research on photogrammetry metric results alignment with CH1903+ Swiss Reference System. This research is part of the long-term certification of Foxel measures in wide geodesic applications. This research focus on alignment of reconstructed three-dimensionnal environment on the MN95 planimetric and NF02 altimetric frames of the CH1903+ reference.
+</p>
+
 
 ### Copyright
 

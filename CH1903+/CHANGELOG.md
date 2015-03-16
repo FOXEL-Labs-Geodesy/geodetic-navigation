@@ -2,7 +2,6 @@
 
 ### Research : March 2015
 
-- `Published` : Rigid transformation estimation (rte)
 - `Added` : Vertical ortho-projection imagery procedure
 - `Added` : Ortho-photography missing pixel interpolation procedure
 
