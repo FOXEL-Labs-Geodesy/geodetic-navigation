@@ -1,5 +1,5 @@
 
-    % FOXEL laboratories - CH1903+ - Swiss reference systems
+    % FOXEL Laboratories - CH1903+ - Swiss reference systems
     %
     % Copyright (c) 2013-2015 FOXEL SA - http://foxel.ch
     % Please read <http://foxel.ch/license> for more information.
