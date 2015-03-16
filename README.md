@@ -2,7 +2,7 @@
 ## FOXEL Laboratories
 
 <p align="justify">
-The <i>FOXEL Laboratories</i> repository is committed to research and development support containing the researches open access publications along with their related source codes. Research source codes are understood as codes used to write and certify complex algorithms that are then implemented in FOXEL photogrammetric solutions. Researches and publications are listed on the [wiki main page](https://github.com/FoxelSA/foxel-laboratories/wiki).
+The <i>FOXEL Laboratories</i> repository is committed to research and development support containing the researches open access publications along with their related source codes. Research source codes are understood as codes used to write and certify complex algorithms that are then implemented in FOXEL photogrammetric solutions. Researches and publications are listed on the <a href="https://github.com/FoxelSA/foxel-laboratories/wiki">repository wiki main page</a>.
 </p>
 
 ### Copyright
