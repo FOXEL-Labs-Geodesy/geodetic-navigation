@@ -38,6 +38,12 @@
     function fl_vertical( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax )
 
         % Display message %
+        fprintf( 2, 'Ortho-projection : Saving CH1903+/MN95 parameters ...\n' );
+
+        % Export function repport %
+        fl_cmd( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax );
+
+        % Display message %
         fprintf( 2, 'Alignment : Importing reference values ...\n' );
 
         % Import origin vertex (MN95 NF02 - CH1903+) %
@@ -46,8 +52,8 @@
         % Display message %
         fprintf( 2, 'Ortho-projection : Importing point-cloud ...\n' );
 
-        % Import MN95-NF02-aligned point cloud (xyzrgba file) %
-        flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );
+        % Import MN95-NF02-aligned point cloud %
+        [ flrPC flSize flpStack flpType flpName flFormat ] = fl_readply( [ flPath 'aligned/cloud.ply' ] );
 
         % Re-frame imported point cloud %
         flrPC(:,1) += flOrg(1,1) - flox;
@@ -146,12 +152,6 @@
 
         % Export ortho-projection image %
         imwrite( flM(:,:,1:3) / 255, [ flPath '/projection/ortho-projection.png' ] );
-
-        % Display message %
-        fprintf( 2, 'Ortho-projection : Saving CH1903+/MN95 parameters ...\n' );
-
-        % Export function repport %
-        fl_cmd( flPath, flox, floy, floz, flnx, flny, pixpermn95, flpSize, flhSize, flmin, flmax );
 
     end
 

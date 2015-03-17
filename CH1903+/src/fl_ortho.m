@@ -38,6 +38,12 @@
     function fl_ortho( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 )
 
         % Display message %
+        fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 parameters ...\n' );
+
+        % Export function repport %
+        fl_cmd( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 );
+
+        % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Importing reference values ...\n' );
 
         % Import origin vertex (MN95 NF02 - CH1903+) %
@@ -46,8 +52,8 @@
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
 
-        % Import MN95-NF02-aligned point cloud (xyzrgba file) %
-        flrPC = load( [ flPath 'aligned/aligned.xyzrgba' ] );
+        % Import MN95-NF02-aligned point cloud %
+        [ flrPC flSize flpStack flpType flpName flFormat ] = fl_readply( [ flPath 'aligned/cloud.ply' ] );
 
         % Restor point cloud frame %
         flrPC(:,1) += flOrg(1,1);
@@ -68,7 +74,7 @@
         fprintf( 2, 'Ortho-photogrammetry : Computing chromatic matrix ...\n' );
 
         % Point cloud vertex projection %
-        for fli = 1 : size( flrPC, 1 )
+        for fli = 1 : flSize
 
             % Height filtering %
             if ( ( flrPC(fli,3) >= z1 ) && ( flrPC(fli,3) <= z2 ) )
@@ -115,12 +121,6 @@
 
         % Export ortho-photography image %
         imwrite( flM(:,:,1:3) / 255, [ flPath '/ortho/ortho-photo.png' ] );
-
-        % Display message %
-        fprintf( 2, 'Ortho-photogrammetry : Saving CH1903+/MN95 parameters ...\n' );
-
-        % Export function repport %
-        fl_cmd( flPath, x1, y1, x2, y2, pixpermn95, z1, z2 );
 
     end
 
