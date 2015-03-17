@@ -102,6 +102,11 @@
         % Exporting scale factor %
         fprintf( flf, 'Scale factor : %f\n', flScale );
 
+        % Apply scale factor %
+        flRaw(:,1) *= flScale;
+        flRaw(:,2) *= flScale;
+        flRaw(:,3) *= flScale;
+
         % Parsing reference and raw points %
         for fli = 1 : min( size( flRaw, 1 ), size( flRef, 1 ) )
 
@@ -111,7 +116,7 @@
             flz = ( flRaw( fli, 1 ) - flt(1) ) * flR'(3,1) + ( flRaw( fli, 2 ) - flt(2) ) * flR'(3,2) + ( flRaw( fli, 3 ) - flt(3) ) * flR'(3,3);
 
             % Export point coordinates %
-            fprintf( flf, 'Reference : ( %16f %16f %16f ) - Aligned ( %16f %16f %16f )\n', flRef( fli, 1 ), flRef( fli, 3 ), flRef( fli, 3 ), flx, fly, flz );
+            fprintf( flf, 'Reference : ( %16f %16f %16f ) - Aligned ( %16f %16f %16f )\n', flRef( fli, 1 ), flRef( fli, 2 ), flRef( fli, 3 ), flx, fly, flz );
 
             % Export distances %
             fprintf( flf, '    Euclidian deviation  : %16f\n', sqrt( ( flx - flRef( fli, 1 ) ) ^ 2 + ( fly - flRef( fli, 2 ) ) ^ 2 + ( flz - flRef( fli, 3 ) ) ^ 2 ) );
