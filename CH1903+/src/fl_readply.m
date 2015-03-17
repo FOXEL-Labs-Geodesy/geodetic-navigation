@@ -57,16 +57,19 @@
             % Reading loop %
             while ( ( ~ feof( flf ) ) && ( flMode > 0 ) )
 
-                % Read token %
-                flToken = fscanf( flf, '%s', 1 );
-
                 % Reading mode %
                 if     ( flMode == 1 )
+
+                    % Read token %
+                    flToken = fscanf( flf, '%s', 1 );
 
                     % Detect format consistency %
                     if ( strcmp( flToken, 'ply' ) ); flMode = 2; else; flMode = 0; end
 
                 elseif ( flMode == 2 )
+
+                    % Read token %
+                    flToken = fscanf( flf, '%s', 1 );
 
                     % Detect format consistency %
                     if ( strcmp( flToken, 'format' ) )
@@ -82,6 +85,9 @@
                     else; flMode = 0; end
 
                 elseif ( flMode == 3 )
+
+                    % Read token %
+                    flToken = fscanf( flf, '%s', 1 );
 
                     % Detect specific token %
                     if     ( strcmp( flToken, 'element' ) )
