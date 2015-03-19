@@ -41,7 +41,7 @@
         fprintf( 2, 'Density analysis : importing density data\n' );
 
         % Import density data %
-        flDensity = load( [ flPath 'density/results.dat' ] );
+        flDensity = load( [ flPath 'density/density.dat' ] );
 
         figure;
         hold on;
