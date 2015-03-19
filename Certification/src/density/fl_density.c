@@ -89,8 +89,8 @@
         FILE * flrStream = NULL;
 
         /* Create input path */
-        sprintf( flcPath, "%s/aligned/cloud.ply"  , argv[1] );
-        sprintf( flpPath, "%s/aligned/cloud.ply"  , argv[2] );
+        sprintf( flcPath, "%s/aligned/cloud.ply"  , argv[2] );
+        sprintf( flpPath, "%s/aligned/cloud.ply"  , argv[1] );
         sprintf( flrPath, "%s/density/density.dat", argv[1] );
 
         /* Create input streams */
@@ -107,10 +107,6 @@
             return( EXIT_FAILURE );
 
         }
-
-        /* Retrieve stream sizes */
-        flc = fscanf( flcStream, "%li", & flcSize );
-        flc = fscanf( flpStream, "%li", & flpSize );
 
         /* Avoid ply header - expect x,y,z,r,g,b file */
         do { 
@@ -137,9 +133,6 @@
 
             /* Read point definition */
             flc = fscanf( flcStream, "%lf %lf %lf %i %i %i", flcArray + flParse * 3, flcArray + flParse * 3 + 1, flcArray + flParse * 3 + 2, & flr, & flg, & flb );
-
-        /* Reset token */
-        memset( flToken, 0, 256 );
 
         /* Avoid ply header - expect x,y,z,r,g,b file */
         do { 
