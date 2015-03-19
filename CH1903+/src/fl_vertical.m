@@ -53,12 +53,12 @@
         fprintf( 2, 'Ortho-projection : Importing point-cloud ...\n' );
 
         % Import MN95-NF02-aligned point cloud %
-        [ flrPC flSize flpStack flpType flpName flFormat ] = fl_readply( [ flPath 'aligned/cloud.ply' ] );
+        [ flrPC flSize flpStack flpType flpName flFormat flxr ] = fl_readply( [ flPath 'aligned/cloud.ply' ] );
 
         % Re-frame imported point cloud %
-        flrPC(:,1) += flOrg(1,1) - flox;
-        flrPC(:,2) += flOrg(1,2) - floy;
-        flrPC(:,3) += flOrg(1,3) - floz;
+        flrPC(:,flxr(1)) += flOrg(1,1) - flox;
+        flrPC(:,flxr(2)) += flOrg(1,2) - floy;
+        flrPC(:,flxr(3)) += flOrg(1,3) - floz;
 
         % Display message %
         fprintf( 2, 'Ortho-projection : Preparing chromatic matrix ...\n' );
@@ -118,9 +118,9 @@
                 if ( ( flDist > flmin ) && ( flDist < flmax ) )
 
                     % Accumulating colors and count %
-                    flM(flH+1-fly,flx,1) += flrPC(fli,4);
-                    flM(flH+1-fly,flx,2) += flrPC(fli,5);
-                    flM(flH+1-fly,flx,3) += flrPC(fli,6);
+                    flM(flH+1-fly,flx,1) += flrPC(fli,flxr(4));
+                    flM(flH+1-fly,flx,2) += flrPC(fli,flxr(5));
+                    flM(flH+1-fly,flx,3) += flrPC(fli,flxr(6));
                     flM(flH+1-fly,flx,4) += 1;
 
                 end

@@ -54,7 +54,7 @@
             flSize   = 0;
             flpStack = 0;
 
-            % Initialize fast access array %
+            % Initialize fast array access %
             flxr = zeros( 1, 6 );
 
             % Reading loop %
@@ -128,35 +128,35 @@
                         flpName{ flpStack } = fscanf( flf, '%s', 1 );
 
                         % Detect property name %
-                        if     ( strcmp( flpName{ flpStack }, 'x' )
+                        if     ( strcmp( flpName{ flpStack }, 'x' ) )
 
-                            % Fill xyzrgb fast access array %
-                            flxr( 1 ) = flpStack;
+                            % Fast array access %
+                            flxr(1) = flpStack;
 
-                        elseif ( strcmp( flpName{ flpStack }, 'y' )
+                        elseif ( strcmp( flpName{ flpStack }, 'y' ) )
 
-                            % Fill xyzrgb fast access array %
-                            flxr( 2 ) = flpStack;
+                            % Fast array access %
+                            flxr(2) = flpStack;
 
-                        elseif ( strcmp( flpName{ flpStack }, 'z' )
+                        elseif ( strcmp( flpName{ flpStack }, 'z' ) )
 
-                            % Fill xyzrgb fast access array %
-                            flxr( 3 ) = flpStack;
+                            % Fast array access %
+                            flxr(3) = flpStack;
 
-                        elseif ( strcmp( flpName{ flpStack }, 'r' )
+                        elseif ( strcmp( flpName{ flpStack }, 'red' ) )
 
-                            % Fill xyzrgb fast access array %
-                            flxr( 4 ) = flpStack;
+                            % Fast array access %
+                            flxr(4) = flpStack;
 
-                        elseif ( strcmp( flpName{ flpStack }, 'g' )
+                        elseif ( strcmp( flpName{ flpStack }, 'green' ) )
 
-                            % Fill xyzrgb fast access array %
-                            flxr( 5 ) = flpStack;
+                            % Fast array access %
+                            flxr(5) = flpStack;
 
-                        elseif ( strcmp( flpName{ flpStack }, 'b' )
+                        elseif ( strcmp( flpName{ flpStack }, 'blue' ) )
 
-                            % Fill xyzrgb fast access array %
-                            flxr( 6 ) = flpStack;
+                            % Fast array access %
+                            flxr(6) = flpStack;
 
                         end
 

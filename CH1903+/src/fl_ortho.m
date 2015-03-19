@@ -53,12 +53,12 @@
         fprintf( 2, 'Ortho-photogrammetry : Importing point-cloud ...\n' );
 
         % Import MN95-NF02-aligned point cloud %
-        [ flrPC flSize flpStack flpType flpName flFormat ] = fl_readply( [ flPath 'aligned/cloud.ply' ] );
+        [ flrPC flSize flpStack flpType flpName flFormat flxr ] = fl_readply( [ flPath 'aligned/cloud.ply' ] );
 
         % Restor point cloud frame %
-        flrPC(:,1) += flOrg(1,1);
-        flrPC(:,2) += flOrg(1,2);
-        flrPC(:,3) += flOrg(1,3);
+        flrPC(:,flxr(1)) += flOrg(1,1);
+        flrPC(:,flxr(2)) += flOrg(1,2);
+        flrPC(:,flxr(3)) += flOrg(1,3);
 
         % Display message %
         fprintf( 2, 'Ortho-photogrammetry : Preparing chromatic matrix ...\n' );
@@ -87,9 +87,9 @@
                 if ( ( flx >= 1 ) && ( fly >= 1 ) && ( flx <= flW ) && ( fly <= flH ) )
 
                     % Accumulating colors and count %
-                    flM(flH+1-fly,flx,1) += flrPC(fli,4);
-                    flM(flH+1-fly,flx,2) += flrPC(fli,5);
-                    flM(flH+1-fly,flx,3) += flrPC(fli,6);
+                    flM(flH+1-fly,flx,1) += flrPC(fli,flxr(4));
+                    flM(flH+1-fly,flx,2) += flrPC(fli,flxr(5));
+                    flM(flH+1-fly,flx,3) += flrPC(fli,flxr(6));
                     flM(flH+1-fly,flx,4) += 1;
 
                 end
