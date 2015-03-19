@@ -57,6 +57,9 @@
         char flpPath[256] = { '\0' };
         char flrPath[256] = { '\0' };
 
+        /* Token variables */
+        char flToken[256] = { '\0' };
+
         /* Length variables */
         long flcSize = 0;
         long flpSize = 0;
@@ -74,7 +77,6 @@
         int flr = 0;
         int flg = 0;
         int flb = 0;
-        int fla = 0;
         int flc = 0;
         
         /* Array pointer variables */
@@ -87,33 +89,83 @@
         FILE * flrStream = NULL;
 
         /* Create input path */
-        sprintf( flcPath, "%s/density/camera.xyzrgba", argv[1] );
-        sprintf( flpPath, "%s/density/cloud.xyzrgba" , argv[1] );
-        sprintf( flrPath, "%s/density/results.dat"   , argv[1] );
+        sprintf( flcPath, "%s/aligned/cloud.ply"  , argv[1] );
+        sprintf( flpPath, "%s/aligned/cloud.ply"  , argv[2] );
+        sprintf( flrPath, "%s/density/density.dat", argv[1] );
 
         /* Create input streams */
         flcStream = fopen( flcPath, "r" );
         flpStream = fopen( flpPath, "r" );
 
+        /* Detect failure */
+        if ( ( flcStream == NULL ) || ( flpStream == NULL ) ) {
+
+            /* Display message */
+            fprintf( stderr, "Error : unable to open streams\n" );
+
+            /* Exit to system */
+            return( EXIT_FAILURE );
+
+        }
+
         /* Retrieve stream sizes */
         flc = fscanf( flcStream, "%li", & flcSize );
         flc = fscanf( flpStream, "%li", & flpSize );
 
+        /* Avoid ply header - expect x,y,z,r,g,b file */
+        do { 
+
+            /* Read token */
+            flc = fscanf( flcStream, "%s", flToken ); 
+
+            /* Analyse token */
+            if ( strcmp( flToken, "vertex" ) == 0 ) {
+
+                /* Read vertex count */
+                flc = fscanf( flcStream, "%li", & flcSize );
+
+            }
+
+        /* Header end */
+        } while ( strcmp( flToken, "end_header" ) != 0 );
+
         /* Allocate arrays memory */
         flcArray = ( double * ) malloc( flcSize * 3 * sizeof( double ) );
-        flpArray = ( double * ) malloc( flpSize * 3 * sizeof( double ) );
 
         /* Input stream reading */
         for ( flParse = 0; flParse < flcSize; flParse ++ ) 
 
             /* Read point definition */
-            flc = fscanf( flcStream, "%lf %lf %lf %i %i %i %i", flcArray + flParse * 3, flcArray + flParse * 3 + 1, flcArray + flParse * 3 + 2, & flr, & flg, & flb, & fla );
+            flc = fscanf( flcStream, "%lf %lf %lf %i %i %i", flcArray + flParse * 3, flcArray + flParse * 3 + 1, flcArray + flParse * 3 + 2, & flr, & flg, & flb );
+
+        /* Reset token */
+        memset( flToken, 0, 256 );
+
+        /* Avoid ply header - expect x,y,z,r,g,b file */
+        do { 
+
+            /* Read token */
+            flc = fscanf( flpStream, "%s", flToken ); 
+
+            /* Analyse token */
+            if ( strcmp( flToken, "vertex" ) == 0 ) {
+
+                /* Read vertex count */
+                flc = fscanf( flpStream, "%li", & flpSize );
+
+            }
+
+        /* Header end */
+        } while ( strcmp( flToken, "end_header" ) != 0 );
+
+        /* Allocate arrays memory */
+        flpArray = ( double * ) malloc( flpSize * 3 * sizeof( double ) );
 
         /* Input stream reading */
         for ( flParse = 0; flParse < flpSize; flParse ++ ) 
 
             /* Read point definition */
-            flc = fscanf( flpStream, "%lf %lf %lf %i %i %i %i", flpArray + flParse * 3, flpArray + flParse * 3 + 1, flpArray + flParse * 3 + 2, & flr, & flg, & flb, & fla );
+            flc = fscanf( flpStream, "%lf %lf %lf %i %i %i", flpArray + flParse * 3, flpArray + flParse * 3 + 1, flpArray + flParse * 3 + 2, & flr, & flg, & flb );
 
         /* Close input streams */
         fclose( flcStream );
