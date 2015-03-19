@@ -70,15 +70,15 @@
         fprintf( 2, 'Alignment : Alignment of point cloud ...\n' );
 
         % Import point cloud (xyzrgba file) %
-        [ flwPC flSize flpStack flpType flpName flFormat ] = fl_readply( [ flPath '/original/cloud.ply' ] );
+        [ flwPC flSize flpStack flpType flpName flFormat flxr ] = fl_readply( [ flPath '/original/cloud.ply' ] );
 
         % Apply scale factor on point cloud vertex %
-        flwPC(:,1) *= flScale;
-        flwPC(:,2) *= flScale;
-        flwPC(:,3) *= flScale;
+        flwPC(:,flxr(1)) *= flScale;
+        flwPC(:,flxr(2)) *= flScale;
+        flwPC(:,flxr(3)) *= flScale;
 
         % Apply linear transformation on point cloud vertex %
-        flrPC = fl_linear( flwPC, flR, flt );
+        flrPC = fl_linear( flwPC, flR, flt, flxr );
 
         % Display message %
         fprintf( 2, 'Alignment : Exporting point cloud ...\n' );

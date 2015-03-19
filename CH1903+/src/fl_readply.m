@@ -35,7 +35,7 @@
     %      You are required to attribute the work as explained in the "Usage and
     %      Attribution" section of <http://foxel.ch/license>.
 
-    function [ flVertex flSize flpStack flpType flpName flFormat ] = fl_readply( flPly )
+    function [ flVertex flSize flpStack flpType flpName flFormat flxr ] = fl_readply( flPly )
 
         % Create input stream %
         flf = fopen( flPly, 'r' );
@@ -53,6 +53,9 @@
             flMode   = 1;
             flSize   = 0;
             flpStack = 0;
+
+            % Initialize fast access array %
+            flxr = zeros( 1, 6 );
 
             % Reading loop %
             while ( ( ~ feof( flf ) ) && ( flMode > 0 ) )
@@ -123,6 +126,39 @@
 
                         % Read token %
                         flpName{ flpStack } = fscanf( flf, '%s', 1 );
+
+                        % Detect property name %
+                        if     ( strcmp( flpName{ flpStack }, 'x' )
+
+                            % Fill xyzrgb fast access array %
+                            flxr( 1 ) = flpStack;
+
+                        elseif ( strcmp( flpName{ flpStack }, 'y' )
+
+                            % Fill xyzrgb fast access array %
+                            flxr( 2 ) = flpStack;
+
+                        elseif ( strcmp( flpName{ flpStack }, 'z' )
+
+                            % Fill xyzrgb fast access array %
+                            flxr( 3 ) = flpStack;
+
+                        elseif ( strcmp( flpName{ flpStack }, 'r' )
+
+                            % Fill xyzrgb fast access array %
+                            flxr( 4 ) = flpStack;
+
+                        elseif ( strcmp( flpName{ flpStack }, 'g' )
+
+                            % Fill xyzrgb fast access array %
+                            flxr( 5 ) = flpStack;
+
+                        elseif ( strcmp( flpName{ flpStack }, 'b' )
+
+                            % Fill xyzrgb fast access array %
+                            flxr( 6 ) = flpStack;
+
+                        end
 
                     elseif ( strcmp( flToken, 'end_header' ) );
 
