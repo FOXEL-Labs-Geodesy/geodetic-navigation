@@ -115,7 +115,7 @@
         ylim( [ min( flPlot(:,2) - flPlot(:,3) ), max( flPlot(:,2) + flPlot(:,3) ) ] );
 
         % Figure exportation in color EPS file %
-        print( '-depsc', '-F:12', 'peridistance.eps' );
+        print( '-depsc', '-F:12', '../../dev/images/peridistance.eps' );
         
     end
 
