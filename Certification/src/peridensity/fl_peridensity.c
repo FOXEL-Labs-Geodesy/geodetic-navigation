@@ -129,10 +129,21 @@
         flcArray = ( double * ) malloc( flcSize * 3 * sizeof( double ) );
 
         /* Input stream reading */
-        for ( flParse = 0; flParse < flcSize; flParse ++ ) 
+        for ( flParse = 0; flParse < flcSize; flParse ++ ) {
 
             /* Read point definition */
-            flc = fscanf( flcStream, "%lf %lf %lf %i %i %i", flcArray + flParse * 3, flcArray + flParse * 3 + 1, flcArray + flParse * 3 + 2, & flr, & flg, & flb );
+            flc = fscanf( flcStream, "%lf %lf %lf %i %i %i", 
+
+                flcArray + ( flParse * 3 ), 
+                flcArray + ( flParse * 3 ) + 1,
+                flcArray + ( flParse * 3 ) + 2, 
+                & flr, 
+                & flg, 
+                & flb 
+
+            );
+
+        }
 
         /* Avoid ply header - expect x,y,z,r,g,b file */
         do { 
@@ -155,10 +166,21 @@
         flpArray = ( double * ) malloc( flpSize * 3 * sizeof( double ) );
 
         /* Input stream reading */
-        for ( flParse = 0; flParse < flpSize; flParse ++ ) 
+        for ( flParse = 0; flParse < flpSize; flParse ++ ) {
 
             /* Read point definition */
-            flc = fscanf( flpStream, "%lf %lf %lf %i %i %i", flpArray + flParse * 3, flpArray + flParse * 3 + 1, flpArray + flParse * 3 + 2, & flr, & flg, & flb );
+            flc = fscanf( flpStream, "%lf %lf %lf %i %i %i", 
+
+                flpArray + ( flParse * 3 ), 
+                flpArray + ( flParse * 3 ) + 1, 
+                flpArray + ( flParse * 3 ) + 2, 
+                & flr, 
+                & flg, 
+                & flb 
+
+            );
+
+        }
 
         /* Close input streams */
         fclose( flcStream );
