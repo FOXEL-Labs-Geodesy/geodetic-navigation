@@ -40,10 +40,10 @@
         % Display message %
         fprintf( 2, 'Density analysis : importing peridensity data ...\n' );
 
-        % Import density data %
-        flDensity = load( [ flPath 'density/density.dat' ] );
+        % Import peridistances %
+        flDensity = load( [ flPath 'peridensity/peridensity.dat' ] );
 
-        % Create statistical array %
+        % Create statistical arrays %
         flSize = fix( ( flMax - flMin ) / flRes );
         flStat = cell ( flSize, 3 );
         flPlot = zeros( flSize, 1 );
@@ -57,17 +57,17 @@
             % Compute statistical bin %
             flBin = fix( ( flDensity( fli, 1 ) - flMin ) / flRes );
 
-            % Range detection %
+            % Range detection on bins %
             if ( ( flBin >= 1 ) && ( flBin <= flSize ) )
 
-                % Push statistical measure %
+                % Push measure %
                 flStat{ flBin } = [ flStat{ flBin }, flDensity( fli, 2 ) ];
 
             end
 
         end
 
-        % Process statistical array %
+        % Compute statistical array %
         flk = 0; for fli = 1 : flSize
 
             % Detect empty bin %
@@ -89,7 +89,7 @@
         flPlot = flPlot( 1 : flk, : );
 
         % Display message %
-        fprintf( 2, 'Density analysis : create peridensity plot ...\n' );
+        fprintf( 2, 'Density analysis : computing peridensity plot ...\n' );
 
         % Figure configuration %
         figure;
@@ -97,7 +97,7 @@
         grid on;
         box  on;
 
-        % Create area plot %
+        % Area plot of mean and standard deviation %
         flArea = area( flPlot(:,1), [ flPlot(:,2) - flPlot(:,3), flPlot(:,3), flPlot(:,3) ] );
 
         % Configure area plot %
@@ -114,7 +114,8 @@
         ylabel( 'Peridensity [m]' );
         ylim( [ min( flPlot(:,2) - flPlot(:,3) ), max( flPlot(:,2) + flPlot(:,3) ) ] );
 
-        % Save figure %
+        % Figure exportation in color EPS file %
         print( '-depsc', '-F:12', 'peridistance.eps' );
         
     end
+

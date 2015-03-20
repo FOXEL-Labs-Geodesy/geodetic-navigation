@@ -101,9 +101,9 @@
         FILE * flrStream = NULL;
 
         /* Create stream paths */
-        sprintf( flcPath, "%s/aligned/cloud.ply"  , argv[2] );
-        sprintf( flpPath, "%s/aligned/cloud.ply"  , argv[1] );
-        sprintf( flrPath, "%s/density/density.dat", argv[1] );
+        sprintf( flcPath, "%s/aligned/cloud.ply", argv[2] );
+        sprintf( flpPath, "%s/aligned/cloud.ply", argv[1] );
+        sprintf( flrPath, "%s/peridensity/peridensity.dat", argv[1] );
 
         /* Create input streams */
         flcStream = fopen( flcPath, "r" );
@@ -200,7 +200,7 @@
         flrStream = fopen( flrPath, "w" );
 
         /* Detect failure */
-        if ( ( flrStream == NULL ) || ( flpStream == NULL ) ) {
+        if ( flrStream == NULL ) {
 
             /* Display message */
             fprintf( stderr, "Error : unable to open output stream\n" );
