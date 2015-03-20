@@ -41,14 +41,26 @@
     # include <string.h>
     # include <math.h>
 
-    /*! \brief Main function
-     *
-     *
-     *  \param  argv Main function standard parameter
-     *  \param  argc Main function standard parameter
-     *
-     *  \return Returns exit code
-     */
+/*! \brief Main function
+ *
+ *  The main function reads the provided input ply files, expected to be
+ *  in x, y, z, red, green and blue format and compute both peridistances
+ *  to camera and to the points set itself, for each element of the points
+ *  set. The results are exported in the output file.
+ *
+ *  Usage :
+ *  
+ *  ./fl_peridistance path_to_set path_to_camera
+ *
+ *  where the path_to_set is the path to the directory structure containing
+ *  the aligned points set. The path_to_camera points the same for the
+ *  camera trajectory points set.
+ *
+ *  \param  argv Main function standard parameter
+ *  \param  argc Main function standard parameter
+ *
+ *  \return Returns exit code
+ */
 
     int main ( int argc, char ** argv ) {
 
@@ -60,7 +72,7 @@
         /* Token variables */
         char flToken[256] = { '\0' };
 
-        /* Length variables */
+        /* Size variables */
         long flcSize = 0;
         long flpSize = 0;
 
@@ -88,7 +100,7 @@
         FILE * flpStream = NULL;
         FILE * flrStream = NULL;
 
-        /* Create input path */
+        /* Create stream paths */
         sprintf( flcPath, "%s/aligned/cloud.ply"  , argv[2] );
         sprintf( flpPath, "%s/aligned/cloud.ply"  , argv[1] );
         sprintf( flrPath, "%s/density/density.dat", argv[1] );
@@ -101,14 +113,18 @@
         if ( ( flcStream == NULL ) || ( flpStream == NULL ) ) {
 
             /* Display message */
-            fprintf( stderr, "Error : unable to open streams\n" );
+            fprintf( stderr, "Error : unable to open input streams\n" );
+
+            /* Close stream */
+            if ( flcStream != NULL ) fclose( flcStream );
+            if ( flpStream != NULL ) fclose( flpStream );
 
             /* Exit to system */
             return( EXIT_FAILURE );
 
         }
 
-        /* Avoid ply header - expect x,y,z,r,g,b file */
+        /* Camera ply header reading */
         do { 
 
             /* Read token */
@@ -125,27 +141,24 @@
         /* Header end */
         } while ( strcmp( flToken, "end_header" ) != 0 );
 
-        /* Allocate arrays memory */
+        /* Allocate array memory */
         flcArray = ( double * ) malloc( flcSize * 3 * sizeof( double ) );
 
         /* Input stream reading */
         for ( flParse = 0; flParse < flcSize; flParse ++ ) {
 
-            /* Read point definition */
+            /* Read point coordinates */
             flc = fscanf( flcStream, "%lf %lf %lf %i %i %i", 
 
                 flcArray + ( flParse * 3 ), 
                 flcArray + ( flParse * 3 ) + 1,
                 flcArray + ( flParse * 3 ) + 2, 
-                & flr, 
-                & flg, 
-                & flb 
 
-            );
+            & flr, & flg, & flb );
 
         }
 
-        /* Avoid ply header - expect x,y,z,r,g,b file */
+        /* Points set ply header reading */
         do { 
 
             /* Read token */
@@ -162,23 +175,20 @@
         /* Header end */
         } while ( strcmp( flToken, "end_header" ) != 0 );
 
-        /* Allocate arrays memory */
+        /* Allocate array memory */
         flpArray = ( double * ) malloc( flpSize * 3 * sizeof( double ) );
 
         /* Input stream reading */
         for ( flParse = 0; flParse < flpSize; flParse ++ ) {
 
-            /* Read point definition */
+            /* Read point coordinates */
             flc = fscanf( flpStream, "%lf %lf %lf %i %i %i", 
 
                 flpArray + ( flParse * 3 ), 
                 flpArray + ( flParse * 3 ) + 1, 
                 flpArray + ( flParse * 3 ) + 2, 
-                & flr, 
-                & flg, 
-                & flb 
 
-            );
+            & flr, & flg, & flb );
 
         }
 
@@ -189,17 +199,28 @@
         /* Create output stream */
         flrStream = fopen( flrPath, "w" );
 
-        /* Parsing points */
+        /* Detect failure */
+        if ( ( flrStream == NULL ) || ( flpStream == NULL ) ) {
+
+            /* Display message */
+            fprintf( stderr, "Error : unable to open output stream\n" );
+
+            /* Exit to system */
+            return( EXIT_FAILURE );
+
+        }
+
+        /* Parsing points set vertex */
         for ( flParse = 0; flParse < flpSize; flParse += 3 ) {
 
-            /* Initialize search */
+            /* Search for peridistances */
             flcDist = 1e100;
             flpDist = 1e100;
 
             /* Search nearest camera */
             for ( flSearch = 0; flSearch < flcSize; flSearch += 3 ) {
 
-                /* Compute distance */
+                /* Compute distance camera-point */
                 fltDist = sqrt( 
 
                     ( * ( flpArray + flParse     ) - * ( flcArray + flSearch     ) ) * ( * ( flpArray + flParse     ) - * ( flcArray + flSearch     ) ) +
@@ -208,18 +229,18 @@
 
                 );
 
-                /* Compare distance */
+                /* Search for smallest distance */
                 if ( fltDist < flcDist ) flcDist = fltDist;
 
             }
 
-            /* Search nearest camera */
+            /* Search nearest point */
             for ( flSearch = 0; flSearch < flcSize; flSearch += 3 ) {
 
                 /* Avoid identical point */
                 if ( flSearch != flParse ) {
 
-                    /* Compute distance */
+                /* Compute distance point-point */
                     fltDist = sqrt( 
 
                         ( * ( flpArray + flParse     ) - * ( flpArray + flSearch     ) ) * ( * ( flpArray + flParse     ) - * ( flpArray + flSearch     ) ) +
@@ -228,14 +249,14 @@
 
                     );
 
-                    /* Compare distance */
+                    /* Search for smallest distance */
                     if ( fltDist < flpDist ) flpDist = fltDist;
 
                 }
 
             }
 
-            /* Export results */
+            /* Export peridistances in output stream */
             fprintf( flrStream, "%lf %lf\n", flcDist, flpDist );
 
         }
@@ -247,3 +268,4 @@
         return( EXIT_SUCCESS );
 
     }
+
