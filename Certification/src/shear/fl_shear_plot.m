@@ -38,13 +38,13 @@
     function fl_shear_plot( flPath, flPlanpmin, flPlanpmax, flAltpmin, flAltpmax, flImage )
 
         % Display message %
-        fprintf( 2, 'Shear : importing data ...' );
+        fprintf( 2, 'Shear : importing data ...\n' );
 
         % Import reference points coordinates %
         flShear = load( [ flPath 'aligned/shear.dat' ] );
 
         % Display message %
-        fprintf( 2, 'Shear : computing plot ...' );
+        fprintf( 2, 'Shear : computing plot ...\n' );
         
         % Compute statistical quantities %
         flmx = mean( flShear(:,1) - flShear(:,4) );
@@ -70,7 +70,7 @@
         fl_shear_plot_ellipse( 0, 0, flPlanpmax, flPlanpmax, '-', [ 178 30 20 ] / 255, 1 );
 
         % Draw mean and standard deviation %
-        fl_shear_plot_ellipse( flmx, flmy, flsx, flsy, '-', [ 255 117 108 ] / 255, 1 );
+        fl_shear_plot_ellipse( flmx, flmy, flsx / 2, flsy / 2, '-', [ 255 117 108 ] / 255, 1 );
 
         % Display planimetric shear %
         plot( flShear(:,1) - flShear(:,4), flShear(:,2) - flShear(:,5), '+', 'Color', [ 255 117 108 ] / 255 );
@@ -78,7 +78,8 @@
         % Axis configuration %
         xlabel( 'Longitudinal shear [m]' );
         ylabel( 'Latitudinal shear [m]' );
-        axis( [ -0.6 0.6 -0.6 0.6 ], 'Square' );
+        axis( [ -1 1 -1 1 ], 'Square' );
+        %axis( [ -0.8 0.8 -0.8 0.8 ], 'Square' );
 
         % Configure subplot %
         subplot( 1, 2, 2 );
@@ -93,7 +94,7 @@
         fl_shear_plot_ellipse( 0, 0, flPlanpmax, flAltpmax, '-', [ 178 30 20 ] / 255, 1 );
 
         % Draw mean and standard deviation %
-        fl_shear_plot_ellipse( flmx, flmz, flsx, flsz, '-', [ 255 117 108 ] / 255, 1 );
+        fl_shear_plot_ellipse( flmx, flmz, flsx / 2, flsz / 2, '-', [ 255 117 108 ] / 255, 1 );
 
         % Display altimetric shear %
         plot( flShear(:,1) - flShear(:,4), flShear(:,3) - flShear(:,6), '+', 'Color', [ 255 117 108 ] / 255 );
@@ -101,7 +102,7 @@
         % Axis configuration %
         xlabel( 'Longitudinal shear [m]' );
         ylabel( 'Radial shear [m]' );
-        axis( [ -0.6 0.6 -0.6 0.6 ], 'Square' );
+        axis( [ -1 1 -1 1 ], 'Square' );
 
         % Figure exportation in color EPS file %
         print( '-depsc', '-F:12', [ '../../dev/images/' flImage '.eps' ] );
