@@ -35,7 +35,7 @@
     %      You are required to attribute the work as explained in the "Usage and
     %      Attribution" section of <http://foxel.ch/license>.
 
-    function fl_peridensity_plot( flPath, flMin, flMax, flRes )
+    function fl_peridensity_plot( flPath, flMin, flMax, flRes, flImage )
 
         % Display message %
         fprintf( 2, 'Density analysis : importing peridensity data ...\n' );
@@ -115,7 +115,7 @@
         ylim( [ min( flPlot(:,2) - flPlot(:,3) ), max( flPlot(:,2) + flPlot(:,3) ) ] );
 
         % Figure exportation in color EPS file %
-        print( '-depsc', '-F:12', '../../dev/images/peridistance.eps' );
+        print( '-depsc', '-F:12', [ '../../dev/images/' flImage '.eps' ] );
         
     end
 
