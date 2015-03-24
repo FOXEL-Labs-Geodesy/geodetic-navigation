@@ -38,7 +38,7 @@
     function fl_peridensity_plot( flPath, flMin, flMax, flRes, flImage )
 
         % Display message %
-        fprintf( 2, 'Density analysis : importing peridensity data ...\n' );
+        fprintf( 2, 'Peridensity analysis : importing peridensity data ...\n' );
 
         % Import peridistances %
         flDensity = load( [ flPath 'peridensity/peridensity.dat' ] );
@@ -49,7 +49,7 @@
         flPlot = zeros( flSize, 1 );
 
         % Display message %
-        fprintf( 2, 'Density analysis : computing peridensity statistics ...\n' );
+        fprintf( 2, 'Peridensity analysis : computing peridensity statistics ...\n' );
 
         % Fill statistical array %
         for fli = 1 : size( flDensity, 1 )
@@ -89,7 +89,7 @@
         flPlot = flPlot( 1 : flk, : );
 
         % Display message %
-        fprintf( 2, 'Density analysis : computing peridensity plot ...\n' );
+        fprintf( 2, 'Peridensity analysis : computing peridensity plot ...\n' );
 
         % Figure configuration %
         figure;
