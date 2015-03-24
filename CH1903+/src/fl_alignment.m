@@ -96,11 +96,17 @@
 
     function fl_alignment_repport( flPath, flRef, flRaw, flR, flt, flScale )
 
-        % Create output stream for repport %
-        flf = fopen( [ flPath '/aligned/repport.dat' ], 'w' );
+        % Create output stream for scale %
+        flf = fopen( [ flPath '/aligned/scale.dat' ], 'w' );
 
         % Exporting scale factor %
-        fprintf( flf, 'Scale factor : %f\n', flScale );
+        fprintf( flf, '%f %f %f\n', flScale, flScale, flScale );
+
+        % Close output stream for scale %
+        fclose( flf );
+
+        % Create output stream for shear %
+        flf = fopen( [ flPath '/aligned/shear.dat' ], 'w' );
 
         % Apply scale factor %
         flRaw(:,1) *= flScale;
@@ -115,17 +121,12 @@
             fly = ( flRaw( fli, 1 ) - flt(1) ) * flR'(2,1) + ( flRaw( fli, 2 ) - flt(2) ) * flR'(2,2) + ( flRaw( fli, 3 ) - flt(3) ) * flR'(2,3);
             flz = ( flRaw( fli, 1 ) - flt(1) ) * flR'(3,1) + ( flRaw( fli, 2 ) - flt(2) ) * flR'(3,2) + ( flRaw( fli, 3 ) - flt(3) ) * flR'(3,3);
 
-            % Export point coordinates %
-            fprintf( flf, 'Reference : ( %16f %16f %16f ) - Aligned ( %16f %16f %16f )\n', flRef( fli, 1 ), flRef( fli, 2 ), flRef( fli, 3 ), flx, fly, flz );
-
-            % Export distances %
-            fprintf( flf, '    Euclidian deviation  : %16f\n', sqrt( ( flx - flRef( fli, 1 ) ) ^ 2 + ( fly - flRef( fli, 2 ) ) ^ 2 + ( flz - flRef( fli, 3 ) ) ^ 2 ) );
-            fprintf( flf, '    Panimetric deviation : %16f\n', sqrt( ( flx - flRef( fli, 1 ) ) ^ 2 + ( fly - flRef( fli, 2 ) ) ^ 2 ) );
-            fprintf( flf, '    Altimetric deviation : %16f\n', sqrt( ( flz - flRef( fli, 3 ) ) ^ 2 ) );
+            % Export points coordinates %
+            fprintf( flf, '%f %f %f %f %f %f\n', flRef( fli, 1 ), flRef( fli, 2 ), flRef( fli, 3 ), flx, fly, flz );
 
         end
 
-        % Close output stream %
+        % Close output stream for shear %
         fclose( flf );
 
     end
