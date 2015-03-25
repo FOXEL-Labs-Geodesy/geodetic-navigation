@@ -54,6 +54,11 @@
         flsy = std ( flShear(:,2) - flShear(:,5) );
         flsz = std ( flShear(:,3) - flShear(:,6) );
 
+        % Display shear variances %
+        fprintf( 2, 'Shear x : %f\n', flsx );
+        fprintf( 2, 'Shear y : %f\n', flsy );
+        fprintf( 2, 'Shear z : %f\n', flsz );
+
         % Figure %
         figure;
 
