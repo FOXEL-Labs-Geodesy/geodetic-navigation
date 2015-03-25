@@ -79,7 +79,6 @@
         xlabel( 'Longitudinal shear [m]' );
         ylabel( 'Latitudinal shear [m]' );
         axis( [ -1 1 -1 1 ], 'Square' );
-        %axis( [ -0.8 0.8 -0.8 0.8 ], 'Square' );
 
         % Configure subplot %
         subplot( 1, 2, 2 );
