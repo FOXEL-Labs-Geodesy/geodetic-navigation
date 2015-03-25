@@ -2,4 +2,5 @@
 
 ### Research : March 2015
 
-- `Added` : Adding peridensity certification procedure
+- `Added` : Points sets shear certification method
+- `Added` : Peridensity certification method
