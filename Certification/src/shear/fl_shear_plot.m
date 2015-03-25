@@ -76,8 +76,8 @@
         plot( flShear(:,1) - flShear(:,4), flShear(:,2) - flShear(:,5), '+', 'Color', [ 255 117 108 ] / 255 );
 
         % Axis configuration %
-        xlabel( 'Longitudinal shear [m]' );
-        ylabel( 'Latitudinal shear [m]' );
+        xlabel( 'x [m]' );
+        ylabel( 'y [m]' );
         axis( [ -1 1 -1 1 ], 'Square' );
 
         % Configure subplot %
@@ -99,8 +99,8 @@
         plot( flShear(:,1) - flShear(:,4), flShear(:,3) - flShear(:,6), '+', 'Color', [ 255 117 108 ] / 255 );
 
         % Axis configuration %
-        xlabel( 'Longitudinal shear [m]' );
-        ylabel( 'Radial shear [m]' );
+        xlabel( 'x [m]' );
+        ylabel( 'z [m]' );
         axis( [ -1 1 -1 1 ], 'Square' );
 
         % Figure exportation in color EPS file %
