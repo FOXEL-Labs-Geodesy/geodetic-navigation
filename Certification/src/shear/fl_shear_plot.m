@@ -120,6 +120,6 @@
         flv = flb * sin( linspace( 0, 2 * pi, 128 ) );
 
         % Draw ellipse %
-        plot( flu, flv, flDesc, 'Color', flColor, 'LineWidth', flWidth );
+        plot( flu + flx, flv + fly, flDesc, 'Color', flColor, 'LineWidth', flWidth );
 
     end
