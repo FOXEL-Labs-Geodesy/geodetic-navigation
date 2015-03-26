@@ -98,7 +98,7 @@
         box  on;
 
         % Area plot of mean and standard deviation %
-        flArea = area( flPlot(:,1), [ flPlot(:,2) - flPlot(:,3), flPlot(:,3), flPlot(:,3) ] );
+        flArea = area( flPlot(:,1), [ flPlot(:,2) - flPlot(:,3) * 0.5, flPlot(:,3) * 0.5, flPlot(:,3) * 0.5 ] );
 
         % Configure area plot %
         set( flArea(1), 'FaceColor', 'None'             , 'EdgeColor', 'None' );
@@ -106,13 +106,13 @@
         set( flArea(3), 'FaceColor', [ 178 30 20 ] / 255, 'EdgeColor', 'None' );
 
         % Display mean curve %
-        plot( flPlot(:,1), flPlot(:,2), '-', 'Color', [ 255 117 108 ] / 255, 'LineWidth', 2 );
+        plot( flPlot(:,1), flPlot(:,2), '-', 'Color', [ 255 117 108 ] / 255, 'LineWidth', 1 );
 
         % Figure configuration %
         xlabel( 'Sensors peridistances [m]' );
         xlim( [ min( flPlot(:,1) ), max( flPlot(:,1) ) ] );
         ylabel( 'Peridensity [m]' );
-        ylim( [ min( flPlot(:,2) - flPlot(:,3) ), max( flPlot(:,2) + flPlot(:,3) ) ] );
+        ylim( [ min( flPlot(:,2) - flPlot(:,3) * 0.5 ), max( flPlot(:,2) + flPlot(:,3) * 0.5 ) ] );
 
         % Figure exportation in color EPS file %
         print( '-depsc', '-F:12', [ '../../dev/images/' flImage '.eps' ] );
