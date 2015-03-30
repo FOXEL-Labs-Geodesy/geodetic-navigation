@@ -77,13 +77,13 @@
         long flpSize = 0;
 
         /* Parsing variables */
-        long flParse = 0;
+        long flParse  = 0;
         long flSearch = 0;
 
         /* Distance variables */
-        double fltDist = 0;
-        double flcDist = 0;
-        double flpDist = 0;
+        double fltDist = 0.0;
+        double flcDist = 0.0;
+        double flpDist = 0.0;
 
         /* Reading variables */
         int flr = 0;
