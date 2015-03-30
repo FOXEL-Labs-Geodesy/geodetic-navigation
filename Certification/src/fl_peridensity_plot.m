@@ -89,6 +89,12 @@
         flPlot = flPlot( 1 : flk, : );
 
         % Display message %
+        fprintf( 2, 'Peridensity analysis : computing peridensity theoric models ...\n' );
+
+        % Compute theoric models %
+        [ flPair flBest ] = fl_peridensity_model( flPlot(:,1) );
+
+        % Display message %
         fprintf( 2, 'Peridensity analysis : computing peridensity plot ...\n' );
 
         % Figure configuration %
@@ -108,14 +114,18 @@
         % Display mean curve %
         plot( flPlot(:,1), flPlot(:,2), '-', 'Color', [ 255 117 108 ] / 255, 'LineWidth', 1 );
 
+        % Display theoric models %
+        plot( flPlot(:,1), flPair, '-', 'Color', [ 0 255 117 ] / 255, 'LineWidth', 1 );
+        plot( flPlot(:,1), flBest, '-', 'Color', [ 0 255 197 ] / 255, 'LineWidth', 1 );
+
         % Figure configuration %
         xlabel( 'Sensors peridistances [m]' );
         xlim( [ min( flPlot(:,1) ), max( flPlot(:,1) ) ] );
         ylabel( 'Peridensity [m]' );
-        ylim( [ min( flPlot(:,2) - flPlot(:,3) * 0.5 ), max( flPlot(:,2) + flPlot(:,3) * 0.5 ) ] );
+        ylim( [ 0, max( flPlot(:,2) + flPlot(:,3) * 0.5 ) ] );
 
         % Figure exportation in color EPS file %
-        print( '-depsc', '-F:12', [ '../../dev/images/' flImage '.eps' ] );
+        print( '-depsc', '-F:12', [ '../dev/images/' flImage '.eps' ] );
         
     end
 
