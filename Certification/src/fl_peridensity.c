@@ -213,7 +213,7 @@
         }
 
         /* Parsing points set vertex */
-        # pragma omp parallel firstprivate(flParse,flSearch,flcSize,flpSize,flcDist,flpDist) num_threads( atoi( argv[2] ) )
+        # pragma omp parallel firstprivate(flParse,flSearch,flcSize,flpSize,flcDist,flpDist,fltDist) num_threads( atoi( argv[2] ) )
         # pragma omp for
         for ( flParse = 0; flParse < flpSize; flParse += 3 ) {
 

@@ -38,9 +38,9 @@
     function [ flPair flBest ] = fl_peridensity_model( flAbcisse )
 
         % Compute pair-based theoretical model %
-        flPair = ( ( ( ( flAbcisse * 1000 ) .^ 2 ) / 80 ) * 0.0004404 * 0.30 ) / 1000;
+        flPair = ( ( ( ( flAbcisse * 1000 ) .^ 2 ) / 80 ) * 0.0004404 * 0.10 ) / 1000;
 
         % Compute optimal-based theoretical model %
-        flBest = ( ( ( ( flAbcisse * 1000 ) .^ 2 ) / 20000 ) * 0.0004404 * 0.10 ) / 1000;
+        flBest = ( ( ( ( flAbcisse * 1000 ) .^ 2 ) / 5000 ) * 0.0004404 * 0.10 ) / 1000;
 
     end

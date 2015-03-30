@@ -45,7 +45,8 @@
 
         % Create statistical arrays %
         flSize = fix( ( flMax - flMin ) / flRes );
-        flStat = cell ( flSize, 3 );
+        flDist = cell ( flSize );
+        flStat = cell ( flSize );
         flPlot = zeros( flSize, 1 );
 
         % Display message %
@@ -61,6 +62,7 @@
             if ( ( flBin >= 1 ) && ( flBin <= flSize ) )
 
                 % Push measure %
+                flDist{ flBin } = flDensity( fli, 1 );
                 flStat{ flBin } = [ flStat{ flBin }, flDensity( fli, 2 ) ];
 
             end
@@ -71,15 +73,15 @@
         flk = 0; for fli = 1 : flSize
 
             % Detect empty bin %
-            if ( length( flStat{ fli } ) > 0 ) 
+            if ( length( flStat{ fli } ) > 5 ) 
 
                 % Update index %
                 flk += 1;
 
                 % Compute mean value of bin %
-                flPlot( flk, 1 ) = ( fli * flRes ) + flMin;
-                flPlot( flk, 2 ) = mean( flStat{ fli, 1 } );
-                flPlot( flk, 3 ) = std ( flStat{ fli, 1 } );
+                flPlot( flk, 1 ) = flDist{ fli };
+                flPlot( flk, 2 ) = min( flStat{ fli } );
+                flPlot( flk, 3 ) = std ( flStat{ fli } );
 
             end
 
@@ -115,14 +117,14 @@
         plot( flPlot(:,1), flPlot(:,2), '-', 'Color', [ 255 117 108 ] / 255, 'LineWidth', 1 );
 
         % Display theoric models %
-        plot( flPlot(:,1), flPair, '-', 'Color', [ 0 255 117 ] / 255, 'LineWidth', 1 );
-        plot( flPlot(:,1), flBest, '-', 'Color', [ 0 255 197 ] / 255, 'LineWidth', 1 );
+        plot( flPlot(:,1), flPair, '-', 'Color', [ 232 83  12 ] / 255, 'LineWidth', 1 );
+        plot( flPlot(:,1), flBest, '-', 'Color', [ 255 168 21 ] / 255, 'LineWidth', 1 );
 
         % Figure configuration %
-        xlabel( 'Sensors peridistances [m]' );
+        xlabel( 'Camera peridistances [m]' );
         xlim( [ min( flPlot(:,1) ), max( flPlot(:,1) ) ] );
         ylabel( 'Peridensity [m]' );
-        ylim( [ 0, max( flPlot(:,2) + flPlot(:,3) * 0.5 ) ] );
+        ylim( [ min( flPlot(:,2) - flPlot(:,3) * 0.5 ), max( flPlot(:,2) + flPlot(:,3) * 0.5 ) ] );
 
         % Figure exportation in color EPS file %
         print( '-depsc', '-F:12', [ '../dev/images/' flImage '.eps' ] );
