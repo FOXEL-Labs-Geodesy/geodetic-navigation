@@ -40,6 +40,7 @@
     # include <stdlib.h>
     # include <string.h>
     # include <math.h>
+    # include <omp.h>
 
 /*! \brief Main function
  *
@@ -50,7 +51,7 @@
  *
  *  Usage :
  *  
- *  ./fl_peridistance path_to_set path_to_camera
+ *  ./fl_peridistance path_to_set path_to_camera number_of_threads
  *
  *  where the path_to_set is the path to the directory structure containing
  *  the aligned points set. The path_to_camera points the same for the
@@ -89,6 +90,7 @@
         int flr = 0;
         int flg = 0;
         int flb = 0;
+        int fla = 0;
         int flc = 0;
         
         /* Array pointer variables */
@@ -211,6 +213,8 @@
         }
 
         /* Parsing points set vertex */
+        # pragma omp parallel firstprivate(flParse,flSearch,flcSize,flpSize,flcDist,flpDist) num_threads( atoi( argv[2] ) )
+        # pragma omp for
         for ( flParse = 0; flParse < flpSize; flParse += 3 ) {
 
             /* Search for peridistances */
@@ -235,12 +239,12 @@
             }
 
             /* Search nearest point */
-            for ( flSearch = 0; flSearch < flcSize; flSearch += 3 ) {
+            for ( flSearch = 0; flSearch < flpSize; flSearch += 3 ) {
 
                 /* Avoid identical point */
                 if ( flSearch != flParse ) {
 
-                /* Compute distance point-point */
+                    /* Compute distance point-point */
                     fltDist = sqrt( 
 
                         ( * ( flpArray + flParse     ) - * ( flpArray + flSearch     ) ) * ( * ( flpArray + flParse     ) - * ( flpArray + flSearch     ) ) +
