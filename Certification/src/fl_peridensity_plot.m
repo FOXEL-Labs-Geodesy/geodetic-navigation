@@ -73,14 +73,14 @@
         flk = 0; for fli = 1 : flSize
 
             % Detect empty bin %
-            if ( length( flStat{ fli } ) > 64 ) 
+            if ( length( flStat{ fli } ) > 16 ) 
 
                 % Update index %
                 flk += 1;
 
                 % Compute mean value of bin %
                 flPlot( flk, 1 ) = flDist{ fli };
-                flPlot( flk, 2 ) = min( flStat{ fli } );
+                flPlot( flk, 2 ) = mean( flStat{ fli } );
                 flPlot( flk, 3 ) = std ( flStat{ fli } );
 
             end
