@@ -109,7 +109,7 @@
         axis( [ -1 1 -1 1 ], 'Square' );
 
         % Figure exportation in color EPS file %
-        print( '-depsc', '-F:12', [ '../../dev/images/' flImage '.eps' ] );
+        print( '-depsc', '-F:12', [ '../dev/images/' flImage '.eps' ] );
 
     end
 
