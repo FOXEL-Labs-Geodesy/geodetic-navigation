@@ -129,5 +129,19 @@
         % Close output stream for shear %
         fclose( flf );
 
+        % Create output stream for transformation %
+        flf = fopen( [ flPath '/aligned/transform.dat' ], 'w' );
+
+        % Export rotation matrix %
+        fprintf( flf, '%.16f %.16f %.16f\n', flR'(1,1), flR'(1,2), flR'(1,3) );
+        fprintf( flf, '%.16f %.16f %.16f\n', flR'(2,1), flR'(2,2), flR'(2,3) );
+        fprintf( flf, '%.16f %.16f %.16f\n', flR'(3,1), flR'(3,2), flR'(3,3) );
+
+        % Export translation vector %
+        fprintf( flf, '%.16f %.16f %.16f\n', flt(1), flt(2), flt(3) );
+
+        % Close output stream for transformation %
+        fclose( flf );
+
     end
 
