@@ -83,7 +83,7 @@
         % Axis configuration %
         xlabel( 'x [m]' );
         ylabel( 'y [m]' );
-        axis( [ -1 1 -1 1 ], 'Square' );
+        axis( [ -1.5 1.5 -1.5 1.5 ], 'Square' );
 
         % Configure subplot %
         subplot( 1, 2, 2 );
@@ -106,7 +106,7 @@
         % Axis configuration %
         xlabel( 'x [m]' );
         ylabel( 'z [m]' );
-        axis( [ -1 1 -1 1 ], 'Square' );
+        axis( [ -1.5 1.5 -1 1 ], 'Square' );
 
         % Figure exportation in color EPS file %
         print( '-depsc', '-F:12', [ '../dev/images/' flImage '.eps' ] );

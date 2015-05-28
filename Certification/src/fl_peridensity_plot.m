@@ -117,8 +117,8 @@
         plot( flPlot(:,1), flPlot(:,2), '-', 'Color', [ 255 117 108 ] / 255, 'LineWidth', 1 );
 
         % Display theoric models %
-        plot( flPlot(:,1), flPair, ':' , 'Color', [ 232 83  12 ] / 255, 'LineWidth', 1 );
-        plot( flPlot(:,1), flBest, '-.', 'Color', [ 255 168 21 ] / 255, 'LineWidth', 1 );
+        %plot( flPlot(:,1), flPair, ':' , 'Color', [ 232 83  12 ] / 255, 'LineWidth', 1 );
+        %plot( flPlot(:,1), flBest, '-.', 'Color', [ 255 168 21 ] / 255, 'LineWidth', 1 );
 
         % Figure configuration %
         xlabel( 'Camera peridistances [m]' );
