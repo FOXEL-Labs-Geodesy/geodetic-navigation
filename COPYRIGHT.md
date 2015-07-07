@@ -1,8 +1,8 @@
 
 ## Copyright
 
-FOXEL Laboratories<br />
-This program is part of the FOXEL project <[http://foxel.ch](http://foxel.ch)>.
+Laboratory of Geodesy - Geodetic navigation <br />
+This research is part of the FOXEL project <[http://foxel.ch](http://foxel.ch)>.
 
 Copyright (c) 2013-2015 FOXEL SA - [http://foxel.ch](http://foxel.ch)<br />
 Please read <[http://foxel.ch/license](http://foxel.ch/license)> for more
@@ -11,7 +11,7 @@ information.
 
 ## License
 
-This program is licensed under the terms of the
+The source codes are licensed under the terms of the
 [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl.html)
 (GNU AGPL).
 
@@ -29,4 +29,3 @@ The content is licensed under the terms of the
 
 You must read <[http://foxel.ch/license](http://foxel.ch/license)> for more
 information about our Licensing terms and our Usage and Attribution guidelines.
-

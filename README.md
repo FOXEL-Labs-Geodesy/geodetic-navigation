@@ -1,21 +1,20 @@
 
-## FOXEL Laboratories
+## Laboratory of Geodesy <br /> Geodetic navigation
 
 <p align="justify">
-The <i>FOXEL Laboratories</i> repository is committed to research and development support containing the researches open access publications along with their related source codes. Research source codes are understood as codes used to write and certify complex algorithms that are then implemented in FOXEL photogrammetric solutions. Researches and publications are listed on the <a href="https://github.com/FoxelSA/foxel-laboratories/wiki">repository wiki home page</a>.
 </p>
 
 ### Copyright
 
 Copyright (c) 2013-2015 FOXEL SA - [http://foxel.ch](http://foxel.ch)<br />
-This program is part of the FOXEL project <[http://foxel.ch](http://foxel.ch)>.
+This research is part of the FOXEL project <[http://foxel.ch](http://foxel.ch)>.
 
 Please read the [COPYRIGHT.md](COPYRIGHT.md) file for more information.
 
 
 ### License
 
-This program is licensed under the terms of the
+The source codes are licensed under the terms of the
 [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl.html)
 (GNU AGPL), with two additional terms. The content is licensed under the terms
 of the
