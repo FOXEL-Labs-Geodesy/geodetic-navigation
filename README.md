@@ -2,6 +2,9 @@
 ## Laboratory of Geodesy <br /> Geodetic navigation
 
 <p align="justify">
+The department of geodetic navigation is committed to measurement device based
+navigation systems on earth to keep track and orientation of the navigating device
+and especially camera devices.
 </p>
 
 ### Copyright
